@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <h1>Admin Dashboard</h1>
+
+    <div id="dashboardStats">
+    <h3>Dashboard Statistics</h3>
+
+    <h2>Recent Activity</h2>
+    <h2>
+    🔔 <span id="activityCount">0</span> New Notifications
+</h2>
+<button onclick="deleteAllActivities()">Delete All</button>
+    <div id="activityContainer"></div>
+
+    <div class="section">
+
+    <h2>
+        User Feedback
+        (<span id="feedbackCount">0</span>)
+    </h2>
+
+    <div id="feedbackContainer"></div>
+
+</div>
+    
+
+    <p>Total Jobs: <span id="totalJobs">0</span></p>
+
+    <p>Total Applications: <span id="totalApplications">0</span></p>
+</div>
+
+<h3>
+    Total Applicants:
+    <span id="totalApplicants">0</span>
+
+    <button onclick="viewApplicants()">
+        View
+    </button>
+</h3>
+<h3>
+    Total Employers:
+    <span id="totalEmployers">0</span>
+
+    <button onclick="viewEmployers()">
+        View
+    </button>
+</h3>
+    <h2>Applications</h2>
+
+    <div id="applications"></div>
+
+    <h2>Posted Jobs</h2>
+
+<div id="jobs"></div>
+
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>

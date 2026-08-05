@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Job</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h1>Engineering Job Application</h1>
+
+    <form id="applicationForm">
+
+        <label>full name</label>
+        <input id="name" name="name" type="text">
+
+        <label>Email</label>
+        <input id="email" name="email" type="email">
+
+        <label>Phone Number</label>
+        <input id="phone" name="phone" type="text">
+
+        <label>Job Title</label>
+        <input id="jobTitle" name="jobTitle" type="text" readonly>
+
+        <label>Upload CV</label>
+        <input type="file" name="cv" id="cv" accept=".pdf,application/pdf" required>
+
+        <button type="submit" id="applyBtn">Apply</button>
+
+    </form>
+
+    <script src="/js/apply.js"></script>
+
+</body>
+</html>

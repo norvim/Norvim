@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Job</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h1>Post a New Engineering Job</h1>
+
+    <form id="jobForm" enctype="multipart/form-data">
+        <input
+            type="text"
+            id="title"
+            name="title"
+            placeholder="Job Title"
+            required
+        ><br><br>
+
+        <input
+            type="text"
+            id="company"
+            name="company"
+            placeholder="Company"
+            required
+        ><br><br>
+
+        <select id="category" name="category" required>
+    <option value="">Select Engineering Category</option>
+    <option value="Electrical Engineering">Electrical Engineering</option>
+    <option value="Civil Engineering">Civil Engineering</option>
+    <option value="Mechanical Engineering">Mechanical Engineering</option>
+    <option value="Software Engineering">Software Engineering</option>
+    <option value="Chemical Engineering">Chemical Engineering</option>
+    <option value="Industrial Engineering">Industrial Engineering</option>
+    <option value="Telecommunications Engineering">Telecommunications Engineering</option>
+    <option value="Environmental Engineering">Environmental Engineering</option>
+</select><br><br>
+
+        <input
+            type="text"
+            id="location"
+            name="location"
+            placeholder="Location"
+            required
+        ><br><br>
+
+        <input
+            type="text"
+            id="salary"
+            name="salary"
+            placeholder="Salary"
+            required
+        ><br><br>
+
+        <label>Company Logo</label>
+<input type="file" name="logo" accept="image/*">
+
+        <textarea
+            id="description"
+            name="description"
+            placeholder="Job Description"
+            required
+        ></textarea><br><br>
+
+        <button type="submit" id="postJobBtn">Post Job</button>
+        <button type="button" onclick="window.location.href='employer-dashboard.html'">Back</button>
+    </form>
+
+    <script src="js/post-job.js"></script>
+
+</body>
+</html>

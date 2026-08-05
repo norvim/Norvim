@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applicant Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<h2>Applicant Login</h2>
+
+<form id="loginForm">
+
+    <input 
+    type="email" 
+    id="email" 
+    placeholder="Email" 
+    required>
+    <br><br>
+
+
+    <div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+
+    <button type="submit" id="loginBtn">Login</button>
+    
+
+    <p>
+    <a href="forgot-password.html">
+        Forgot Password?
+    </a>
+</p>
+
+</form>
+
+<button class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+
+
+<script src="js/applicant-login.js"></script>
+
+</body>
+</html>

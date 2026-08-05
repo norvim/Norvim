@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h2>Employer Profile</h2>
+
+    <form id="profileForm" enctype="multipart/form-data">
+
+        <label>Company Name</label><br>
+        <input type="text" id="companyName"><br><br>
+
+        <label>Email</label><br>
+        <input type="email" id="email"><br><br>
+
+        <label>Phone</label><br>
+        <input type="text" id="phone"><br><br>
+
+        <label>Company Logo</label><br>
+
+<input
+    type="file"
+    id="logo"
+    name="logo"
+    accept="image/*"
+><br><br>
+
+        <button type="submit" id="updateProfileBtn">Update Profile</button>
+
+        <br><br>
+
+<button type="button"
+        onclick="window.location.href='change-password.html'">
+    Change Password
+</button>
+
+    </form>
+
+    <br>
+
+    <button onclick="window.location.href='employer-dashboard.html'">
+        Back to Dashboard
+    </button>
+
+    <script src="js/employer-profile.js"></script>
+
+</body>
+</html>

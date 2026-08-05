@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h1>Employer Registration</h1>
+
+    <form id="registerForm" enctype="multipart/form-data">
+
+        <input
+            type="text"
+            id="companyName"
+            placeholder="Company Name"
+            required
+        >
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Company Email"
+            required
+        >
+
+        <label>Password</label>
+
+<div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+        <input
+    type="file"
+    id="logo"
+    name="logo"
+    accept="image/*"
+>
+
+    <button type="submit" id="registerBtn">Register</button>
+
+<button class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+    
+    </form>
+
+    <script src="js/employer-register.js"></script>
+
+</body>
+</html>

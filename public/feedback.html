@@ -1,0 +1,39 @@
+<h2>Send Feedback</h2>
+
+<form id="feedbackForm">
+
+    <input
+        type="text"
+        id="name"
+        placeholder="Your Name"
+        required
+    >
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Your Email"
+        required
+    >
+
+    <select id="role" required>
+
+        <option value="">Select Role</option>
+        <option value="Applicant">Applicant</option>
+        <option value="Employer">Employer</option>
+
+    </select>
+
+    <textarea
+        id="message"
+        placeholder="Write your feedback..."
+        required
+    ></textarea>
+
+    <button type="submit" id="feedbackBtn">
+        Send Feedback
+    </button>
+<button onclick="goBack()">Back</button>
+</form>
+
+<script src="js/feedback.js"></script>

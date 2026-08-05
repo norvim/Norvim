@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applicant Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<h2>Applicant Registration</h2>
+
+<form id="registerForm">
+
+    <input type="text" id="name" placeholder="Full Name" required><br><br>
+
+    <input type="email" id="email" placeholder="Email" required><br><br>
+
+    <input type="text" id="phone" placeholder="Phone Number" required><br><br>
+
+    <div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+    <button type="submit" id="registerBtn">Register</button>
+    <button class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+
+</form>
+
+
+<script src="js/applicant-register.js"></script>
+
+</body>
+</html>
