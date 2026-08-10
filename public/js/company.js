@@ -22,7 +22,7 @@ async function loadCompany() {
         const jobs = data.jobs;
 
         container.innerHTML = `
-            ${company.logo ? `<img src="/uploads/${company.logo}" width="120" alt="Company Logo">` : ""}
+            ${company.logo ? `<img src="${company.logo}" width="120" alt="Company Logo">` : ""}
 
             <h2>${company.companyName}</h2>
 

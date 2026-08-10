@@ -7,7 +7,7 @@ const jobsContainer = document.getElementById("jobs");
 // Load applications
 async function loadApplications() {
 
-    const response = await fetch("/api/applications", {
+    const response = await fetch("/api/admin/applications", {
     headers: {
         Authorization: "Bearer " + localStorage.getItem("adminToken")
     }
@@ -79,7 +79,7 @@ const jobs = data.jobs || data;
         jobsContainer.innerHTML += `
             <div class="job-card">
 
-            ${job.logo ? `<img src="/uploads/${job.logo}" width="80">` : ""}
+            ${job.logo ? `<img src="${job.logo}" width="80">` : ""}
 
                 <h3>${job.title}</h3>
 
@@ -109,7 +109,7 @@ const jobs = data.jobs || data;
 // Update application status
 async function updateStatus(id, status) {
 
-    const response = await fetch(`/api/applications/${id}`, {
+    const response = await fetch(`/api/admin/applications/${id}`, {
 
         method: "PUT",
 
@@ -165,7 +165,7 @@ function editJob(id) {
 
 async function deleteApplication(id) {
 
-   const response = await fetch(`/api/applications/${id}`, {
+   const response = await fetch(`/api/admin/applications/${id}`, {
     method: "DELETE",
     headers: {
         Authorization: "Bearer " + localStorage.getItem("adminToken")

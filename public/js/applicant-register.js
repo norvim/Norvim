@@ -4,7 +4,6 @@ form.addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-
     const applicant = {
 
         name: document.getElementById("name").value,
@@ -18,44 +17,54 @@ form.addEventListener("submit", async (e) => {
     };
 
     const button = document.getElementById("registerBtn");
+
     button.disabled = true;
     button.textContent = "Creating Account...";
 
+    try {
 
-   try {
+        const response = await fetch("/api/applicants/register", {
 
-    const response = await fetch("/api/applicants/register", {
+            method: "POST",
 
-        method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+            body: JSON.stringify(applicant)
 
-        body: JSON.stringify(applicant)
+        });
 
-    });
+        const data = await response.json();
 
-    const data = await response.json();
+        if (response.ok) {
 
-    button.disabled = false;
-    button.textContent = "Register";
+            // Save email so verify.html can use it
+            localStorage.setItem("verificationEmail", applicant.email);
 
-    alert(data.message);
-    if (response.ok) {
-        window.location.href = "applicant-login.html";
+            alert(data.message);
+
+            // Go to verification page
+            window.location.href = "verify.html";
+
+        } else {
+
+            alert(data.message);
+
+            button.disabled = false;
+            button.textContent = "Register";
+        }
+
+    } catch (error) {
+
+        button.disabled = false;
+        button.textContent = "Register";
+
+        alert("Registration failed");
+
+        console.error(error);
+
     }
-
-} catch (error) {
-
-    button.disabled = false;
-    button.textContent = "Register";
-
-    alert("Registration failed");
-
-    console.error(error);
-
-}
 
 });
 

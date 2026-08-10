@@ -62,7 +62,7 @@ function displayJobs(jobs) {
 
         jobsContainer.innerHTML += `
             <div class="job-card">
-            ${job.logo ? `<img src="/uploads/${job.logo}" width="80" alt="Company Logo">` : ""}
+            ${job.logo ? `<img src="${job.logo}" width="80" alt="Company Logo">` : ""}
                 <h3>${job.title}</h3>
 
                 <p><strong>Company:</strong> ${job.company}</p>

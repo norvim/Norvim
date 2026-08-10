@@ -39,7 +39,7 @@ async function loadEmployers() {
 
                 <div class="job-card">
 
-                    ${employer.logo ? `<img src="/uploads/${employer.logo}" width="80">` : ""}
+                    ${employer.logo ? `<img src="${employer.logo}" width="80">` : ""}
 
                     <h3>${employer.companyName}</h3>
 
@@ -92,7 +92,7 @@ function searchEmployers() {
 
         <div class="job-card">
 
-            ${employer.logo ? `<img src="/uploads/${employer.logo}" width="80">` : ""}
+            ${employer.logo ? `<img src="${employer.logo}" width="80">` : ""}
 
             <h3>${employer.companyName}</h3>
 

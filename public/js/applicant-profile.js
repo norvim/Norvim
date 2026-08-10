@@ -45,7 +45,7 @@ document.getElementById("portfolio").value =
     if (applicant.profilePhoto) {
 
     document.getElementById("photoPreview").src =
-        "/uploads/" + applicant.profilePhoto;
+        applicant.profilePhoto;
 
 }
 
@@ -99,6 +99,10 @@ document.getElementById("profileForm").addEventListener("submit", async (e) => {
             "applicant",
             JSON.stringify(data.applicant)
         );
+        if(data.applicant.profilePhoto) {
+            document.getElementById("photoPreview").src =
+                data.applicant.profilePhoto;
+        }
         button.disabled = false;
         button.textContent = "Update Profile";
 

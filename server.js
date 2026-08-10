@@ -33,30 +33,74 @@ app.use(express.urlencoded({ extended: true }));
 console.log("NEW SERVER IS RUNNING");
 
 // CV upload setup
-const storage = multer.diskStorage({
+const cvstorage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "uploads/");
+        cb(null, "uploads/cvs/");
     },
     filename: function(req, file, cb) {
         cb(null, Date.now() + "-" + file.originalname);
     }
 });
 
-const upload = multer({ 
-storage: storage,
-fileFilter: function(req, file, cb) {
+const logostorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "uploads/logos/");
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + "-" + file.originalname);
+    }
+});
+
+const profileStorage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "uploads/profiles/");
+    },
+    filename: function(req, file, cb) {
+        cb(null, Date.now() + "-" + file.originalname);
+    }
+});
+
+const uploadCV = multer({
+    storage: cvstorage,
+    fileFilter: function(req, file, cb) {
         if (file.mimetype === "application/pdf") {
             cb(null, true);
         } else {
-           cb(new Error("Only PDF files are allowed."));
+            cb(new Error("Only PDF files are allowed."));
         }
     }
-
 });
 
+const uploadLogo = multer({
+    storage: logostorage,
+        fileFilter: function(req, file, cb) {
+            if (file.mimetype === "image/jpeg" ||
+                 file.mimetype === "image/png" ||
+                 file.mimetype === "image/jpg"
+                ) {
+                cb(null, true);
+            } else {
+                cb(new Error("Only JPG, PNG, and JPEG files are allowed."));
+            }
+        }
+    });
+
+    const uploadProfilePhoto = multer({
+        storage: profileStorage,
+        fileFilter: function(req, file, cb) {
+            if (file.mimetype === "image/jpeg" ||
+                 file.mimetype === "image/png" ||
+                 file.mimetype === "image/jpg"
+                ) {
+                cb(null, true);
+            } else {
+                cb(new Error("Only JPG, JPEG, and PNG files are allowed."));
+            }
+        }
+    });
 
 // Save application
-app.post("/apply", verifyApplicant, upload.single("cv"), async (req, res) => {
+app.post("/apply", verifyApplicant, uploadCV.single("cv"), async (req, res) => {
     console.log("APPLY ROUTE HIT");
 
     try {
@@ -78,7 +122,7 @@ app.post("/apply", verifyApplicant, upload.single("cv"), async (req, res) => {
         });
 
         await transporter.sendMail({
-            from: "norvim41@gmail.com",
+            from: process.env.EMAIL_USER,
             to: "pmax53725@gmail.com",
             subject: "New Job Application",
             text: `
@@ -94,7 +138,7 @@ Job: ${application.jobTitle}
 
   await transporter.sendMail({
 
-    from: "norvim41@gmail.com",
+    from: process.env.EMAIL_USER,
 
     to: application.email,
 
@@ -133,77 +177,110 @@ Rm nyaga`
 });
 
 
-// Get all applications
-app.get("/api/applications", async (req, res) => {
+// Get applications for the logged-in employer
+app.get("/api/applications", employerAuth, async (req, res) => {
+
     try {
-        const applications = await Application.find();
+
+        // Find jobs belonging to this employer
+        const employerJobs = await Job.find({
+            employerId: req.employer.employerId
+        }).select("_id");
+
+        const jobIds = employerJobs.map(job => job._id);
+
+        // Find applications for those jobs
+        const applications = await Application.find({
+            jobId: { $in: jobIds }
+        }).populate("applicantId");
 
         res.json(applications);
 
     } catch (error) {
+
         console.error(error);
 
         res.status(500).json({
             message: "Failed to fetch applications."
         });
+
     }
+
 });
 
+
 // Update application status
-app.put("/api/applications/:id", async (req, res) => {
+app.put("/api/applications/:id", employerAuth, async (req, res) => {
+
     console.log("=== STATUS UPDATE ROUTE REACHED ===");
+
     try {
 
-        console.log("PUT /api/applications/:id route reached");
-
-        const application = await Application.findByIdAndUpdate(
-            req.params.id,
-            {
-                status: req.body.status
-            },
-            {
-                new: true
-            }
+        const application = await Application.findById(
+            req.params.id
         ).populate("applicantId");
-        console.log("Status received:", req.body.status);
+
+        if (!application) {
+            return res.status(404).json({
+                message: "Application not found"
+            });
+        }
+
+        // Make sure this application belongs to a job
+        // posted by the logged-in employer
+        const job = await Job.findOne({
+            _id: application.jobId,
+            employerId: req.employer.employerId
+        });
+
+        if (!job) {
+            return res.status(403).json({
+                message: "You do not have permission to update this application."
+            });
+        }
+
+        // Update status
+        application.status = req.body.status;
+
+        await application.save();
+
         console.log("Status saved:", application.status);
-        console.log("UPDATED APPLICATION:");
-console.log(application);
-console.log("APPLICANT ID:", application.applicantId);
 
-        
-
+        // Create notification for applicant
         if (application.applicantId) {
 
-            console.log("Before Notification.create");
             try {
 
-            const notification = await Notification.create({
-                applicantId: application.applicantId,
-                message: `Your application for ${application.jobTitle} has been ${req.body.status}.`
-            });
+                const notification = await Notification.create({
+                    applicantId: application.applicantId._id,
+                    message: `Your application for ${application.jobTitle} has been ${application.status}.`
+                });
 
-            console.log("After Notification.create");
-            console.log(notification);
+                console.log("Notification created:", notification);
 
-            } catch(notificationError) {
+            } catch (notificationError) {
 
-        console.log("NOTIFICATION CREATION ERROR:");
-        console.log(notificationError.message);
-        console.log(notificationError.errors);
+                console.log("NOTIFICATION CREATION ERROR:");
+                console.log(notificationError.message);
 
-    }
+            }
 
-}
- 
+        }
+
+        // Shortlisted email
         if (application.status === "Shortlisted") {
+
             try {
-                console.log("Sending shortlisted email to:", application.email);
-            await transporter.sendMail({
-                from: "yourgmail@gmail.com",
-                to: application.email,
-                subject: "Congratulations! You have been Shortlisted",
-                text: `Dear ${application.name},
+
+                await transporter.sendMail({
+
+                    from: process.env.EMAIL_USER,
+
+                    to: application.email,
+
+                    subject: "Congratulations! You have been Shortlisted",
+
+                    text: `Dear ${application.name},
 
 Congratulations!
 
@@ -213,26 +290,35 @@ Our recruitment team will contact you soon with the next steps.
 
 Best regards,
 
-Engineering Jobs Team`
-            });
-            console.log("Shortlisted email sent successfully");
-        } catch (error) {
-            console.log("SHORTLISTED EMAIL ERROR:");
-            console.log(error);
-        }
+Norvim`
+
+                });
+
+                console.log("Shortlisted email sent successfully");
+
+            } catch (emailError) {
+
+                console.log("SHORTLISTED EMAIL ERROR:");
+                console.log(emailError);
+
+            }
+
         }
 
+        // Rejected email
         if (application.status === "Rejected") {
 
-            await transporter.sendMail({
+            try {
 
-                from: "yourgmail@gmail.com",
+                await transporter.sendMail({
 
-                to: application.email,
+                    from: process.env.EMAIL_USER,
 
-                subject: "Update on your job application",
+                    to: application.email,
 
-                text: `Dear ${application.name},
+                    subject: "Update on your job application",
+
+                    text: `Dear ${application.name},
 
 Thank you for taking the time to apply for the ${application.jobTitle} position.
 
@@ -242,9 +328,16 @@ We appreciate your interest in our company and encourage you to apply for future
 
 We wish you all the best.
 
-Engineering Jobs Team`
+Norvim`
 
-            });
+                });
+
+            } catch (emailError) {
+
+                console.log("REJECTED EMAIL ERROR:");
+                console.log(emailError);
+
+            }
 
         }
 
@@ -259,10 +352,24 @@ Engineering Jobs Team`
         });
 
     }
+
 });
+
+
 // Delete application
-app.delete("/api/applications/:id", async (req, res) => {
+app.delete("/api/admin/applications/:id", adminAuth, async (req, res) => {
+
     try {
+
+        const application = await Application.findById(req.params.id);
+
+        if (!application) {
+
+            return res.status(404).json({
+                message: "Application not found"
+            });
+
+        }
 
         await Application.findByIdAndDelete(req.params.id);
 
@@ -279,33 +386,8 @@ app.delete("/api/applications/:id", async (req, res) => {
         });
 
     }
-});
-
-
-app.post("/admin-login", (req, res) => {
-
-    const { email, password } = req.body;
-
-    if (
-        email === "admin@engjobs.com" &&
-        password === "admin123"
-    ) {
-
-        res.json({
-            success: true
-        });
-
-    } else {
-
-        res.status(401).json({
-            success: false,
-            message: "Invalid email or password"
-        });
-
-    }
 
 });
-
 async function employerAuth(req, res, next) {
 
     const token = req.headers.authorization;
@@ -319,23 +401,37 @@ async function employerAuth(req, res, next) {
     try {
 
         const decoded = jwt.verify(
-    token.replace("Bearer ", ""),
-    JWT_SECRET
-);
+            token.replace("Bearer ", ""),
+            JWT_SECRET
+        );
 
-const employer = await Employer.findById(decoded.employerId);
+        const employer = await Employer.findById(decoded.employerId);
 
-if (employer.status === "Suspended") {
+        if (!employer) {
+            return res.status(401).json({
+                message: "Employer account not found"
+            });
+        }
 
-    return res.status(403).json({
-        message: "Your account has been suspended by the administrator."
-    });
+        // Check email verification
+        if (!employer.isVerified) {
+            return res.status(403).json({
+                message: "Please verify your email before accessing your employer account."
+            });
+        }
 
-}
+        // Check account suspension
+        if (employer.status === "Suspended") {
 
-req.employer = decoded;
+            return res.status(403).json({
+                message: "Your account has been suspended by the administrator."
+            });
 
-next();
+        }
+
+        req.employer = decoded;
+
+        next();
 
     } catch (error) {
 
@@ -346,7 +442,6 @@ next();
     }
 
 }
-
 async function adminAuth(req, res, next) {
 
     try {
@@ -367,6 +462,10 @@ async function adminAuth(req, res, next) {
             token,
             JWT_SECRET
         );
+
+     console.log("ADMIN AUTH TOKEN VERIFIED");
+     console.log("ADMIN DECODED:", decoded);
+     console.log("ADMIN ROLE:", decoded.role);
 
 
         if (decoded.role !== "admin") {
@@ -425,7 +524,7 @@ next();
 
 
 // Create a new job
-app.post("/api/jobs", employerAuth, upload.single("logo"), async (req, res) => {
+app.post("/api/jobs", employerAuth, uploadLogo.single("logo"), async (req, res) => {
     try {
         const job = new Job({
             title: req.body.title,
@@ -434,7 +533,7 @@ app.post("/api/jobs", employerAuth, upload.single("logo"), async (req, res) => {
             location: req.body.location,
             salary: req.body.salary,
             description: req.body.description,
-            logo: req.file ? req.file.filename : null,
+            logo: req.file ? "uploads/logos/" + req.file.filename : null,
             employerId: req.employer.employerId
         });
 
@@ -750,6 +849,144 @@ app.get("/api/admin/applicants", adminAuth, async (req, res) => {
 
 });
 
+// Get all applications for admin
+app.get("/api/admin/applications", adminAuth, async (req, res) => {
+
+    try {
+
+        const applications = await Application.find()
+            .populate("applicantId")
+            .populate("jobId");
+
+        res.json(applications);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to load applications"
+        });
+
+    }
+
+});
+
+// Admin update application status
+app.put("/api/admin/applications/:id", adminAuth, async (req, res) => {
+
+    try {
+
+        const application = await Application.findById(
+            req.params.id
+        ).populate("applicantId");
+
+        if (!application) {
+
+            return res.status(404).json({
+                message: "Application not found"
+            });
+
+        }
+
+        application.status = req.body.status;
+
+        await application.save();
+
+        // Create notification for applicant
+        if (application.applicantId) {
+
+            await Notification.create({
+                applicantId: application.applicantId._id,
+                message: `Your application for ${application.jobTitle} has been ${application.status}.`
+            });
+
+        }
+
+        // Shortlisted email
+        if (application.status === "Shortlisted") {
+
+            try {
+
+                await transporter.sendMail({
+
+                    from: process.env.EMAIL_USER,
+
+                    to: application.email,
+
+                    subject: "Congratulations! You have been Shortlisted",
+
+                    text: `Dear ${application.name},
+
+Congratulations!
+
+We are pleased to inform you that you have been Shortlisted for the ${application.jobTitle} position.
+
+Our recruitment team will contact you soon with the next steps.
+
+Best regards,
+
+Norvim`
+
+                });
+
+            } catch (emailError) {
+
+                console.log("SHORTLISTED EMAIL ERROR:", emailError);
+
+            }
+
+        }
+
+        // Rejected email
+        if (application.status === "Rejected") {
+
+            try {
+
+                await transporter.sendMail({
+
+                    from: process.env.EMAIL_USER,
+
+                    to: application.email,
+
+                    subject: "Update on your job application",
+
+                    text: `Dear ${application.name},
+
+Thank you for taking the time to apply for the ${application.jobTitle} position.
+
+After careful consideration, we regret to inform you that you have not been selected for this role.
+
+We appreciate your interest in our company and encourage you to apply for future opportunities.
+
+We wish you all the best.
+
+Norvim`
+
+                });
+
+            } catch (emailError) {
+
+                console.log("REJECTED EMAIL ERROR:", emailError);
+
+            }
+
+        }
+
+        res.json(application);
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: "Failed to update application"
+        });
+
+    }
+
+});
+
 
 app.get("/api/admin/employers", adminAuth, async (req, res) => {
 
@@ -964,7 +1201,6 @@ app.post("/api/admin/login", async (req, res) => {
         const admin = await Admin.findOne({
             email: email
         });
-        console.log("Admin found:", admin);
 
 
         if (!admin) {
@@ -980,7 +1216,6 @@ app.post("/api/admin/login", async (req, res) => {
             password,
             admin.password
         );
-        console.log("password match:", isMatch);
 
 
         if (!isMatch) {
@@ -1029,45 +1264,6 @@ app.post("/api/admin/login", async (req, res) => {
 
 });
 
-/*
-app.get("/api/admin/employers", async (req, res) => {
-
-    try {
-
-        const employers = await Employer.find().select("-password");
-
-        const employersWithJobs = await Promise.all(
-
-            employers.map(async (employer) => {
-
-                const jobsPosted = await Job.countDocuments({
-                    employerId: employer._id
-                });
-
-                return {
-                    ...employer.toObject(),
-                    jobsPosted
-                };
-
-            })
-
-        );
-
-        res.json(employersWithJobs);
-
-    } catch (error) {
-
-        console.error(error);
-
-        res.status(500).json({
-            message: "Failed to load employers"
-        });
-
-    }
-
-});
-*/
-
 
 // update job
 app.put("/api/jobs/:id", employerAuth, async (req, res) => {
@@ -1113,7 +1309,7 @@ app.put("/api/jobs/:id", employerAuth, async (req, res) => {
     }
 
 });
-app.post("/api/employers/register", upload.single("logo"), async (req, res) => {
+app.post("/api/employers/register", uploadLogo.single("logo"), async (req, res) => {
 
     try {
 
@@ -1129,32 +1325,139 @@ app.post("/api/employers/register", upload.single("logo"), async (req, res) => {
 
         }
 
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Generate 6-digit verification code
+        const verificationCode =
+            Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Code expires in 10 minutes
+        const verificationCodeExpires =
+            new Date(Date.now() + 10 * 60 * 1000);
+
+        // Create employer
         const employer = new Employer({
 
             companyName,
             email,
             password: hashedPassword,
-            logo: req.file ? req.file.filename : ""
+            logo: req.file ? req.file.filename : "",
+
+            isVerified: false,
+            verificationCode,
+            verificationCodeExpires
+
         });
 
         await employer.save();
 
-        res.json({
-            message: "Employer registered successfully"
+        await Activity.create({
+            message: `${employer.companyName} registered as an employer.`
         });
 
-        await Activity.create({
-    message: `${employer.companyName} registered as an employer.`
-});
+        // Send verification email
+        await transporter.sendMail({
+
+            from: process.env.EMAIL_USER,
+
+            to: email,
+
+            subject: "Verify your Norvim employer account",
+
+            text: `Hello ${companyName},
+
+Your Norvim employer verification code is:
+
+${verificationCode}
+
+This code expires in 10 minutes.
+
+If you did not create this employer account, you can ignore this email.
+
+Thank you,
+Norvim`
+
+        });
+
+        res.status(201).json({
+
+            message:
+                "Employer registration successful. Please check your email for the verification code."
+
+        });
 
     } catch (error) {
 
         console.error(error);
 
         res.status(500).json({
+
             message: "Registration failed"
+
+        });
+
+    }
+
+});
+
+app.post("/api/employers/verify", async (req, res) => {
+
+    try {
+
+        const { email, verificationCode } = req.body;
+
+        const employer = await Employer.findOne({ email });
+
+        if (!employer) {
+            return res.status(404).json({
+                message: "Employer not found"
+            });
+        }
+
+        if (employer.isVerified) {
+            return res.status(400).json({
+                message: "Account is already verified"
+            });
+        }
+
+        if (
+            !employer.verificationCode ||
+            employer.verificationCode !== verificationCode
+        ) {
+            return res.status(400).json({
+                message: "Invalid verification code"
+            });
+        }
+
+        if (
+            !employer.verificationCodeExpires ||
+            new Date() > employer.verificationCodeExpires
+        ) {
+            return res.status(400).json({
+                message: "Verification code has expired"
+            });
+        }
+
+        // Verify employer
+        employer.isVerified = true;
+
+        // Remove verification code after successful verification
+        employer.verificationCode = undefined;
+        employer.verificationCodeExpires = undefined;
+
+        await employer.save();
+
+        res.json({
+            message: "Email verified successfully. You can now log in."
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+            message: error.message
         });
 
     }
@@ -1177,12 +1480,22 @@ app.post("/api/employers/login", async (req, res) => {
 
         }
 
-        const passwordMatch = await bcrypt.compare(password, employer.password);
+        const passwordMatch =
+            await bcrypt.compare(password, employer.password);
 
         if (!passwordMatch) {
 
             return res.status(400).json({
                 message: "Invalid email or password"
+            });
+
+        }
+
+        // Check email verification
+        if (!employer.isVerified) {
+
+            return res.status(403).json({
+                message: "Please verify your email before logging in."
             });
 
         }
@@ -1214,6 +1527,7 @@ app.post("/api/employers/login", async (req, res) => {
                 companyName: employer.companyName,
 
                 email: employer.email,
+
                 logo: employer.logo
 
             }
@@ -1264,7 +1578,7 @@ app.post("/api/employers/forgot-password", async (req, res) => {
 
         await transporter.sendMail({
 
-            from: "norvim41@gmail.com",
+            from: process.env.EMAIL_USER,
 
             to: employer.email,
 
@@ -1487,7 +1801,6 @@ app.post("/api/applicants/register", async (req, res) => {
 
         const { name, email, phone, password } = req.body;
 
-
         // Check if applicant already exists
         const existingApplicant = await Applicant.findOne({ email });
 
@@ -1497,36 +1810,60 @@ app.post("/api/applicants/register", async (req, res) => {
             });
         }
 
-
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Generate 6-digit verification code
+        const verificationCode =
+            Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Code expires in 10 minutes
+        const verificationCodeExpires =
+            new Date(Date.now() + 10 * 60 * 1000);
 
         // Create applicant
         const applicant = new Applicant({
             name,
             email,
             phone,
-            password: hashedPassword
+            password: hashedPassword,
+            isVerified: false,
+            verificationCode,
+            verificationCodeExpires
         });
 
-
         await applicant.save();
+
         await Activity.create({
             message: `${applicant.name} registered as an applicant.`
         });
 
+        // Send verification email
+        await transporter.sendMail({
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Verify your Norvim account",
+            text: `Hello ${name},
+
+Your Norvim verification code is:
+
+${verificationCode}
+
+This code expires in 10 minutes.
+
+If you did not create this account, you can ignore this email.
+
+Thank you,
+Norvim`
+        });
 
         res.status(201).json({
-            message: "Applicant registered successfully"
+            message: "Registration successful. Please check your email for the verification code."
         });
-
-        await Activity.create({
-            mesage: `${applicant.name} registered as an applicant.`
-        });
-
 
     } catch (error) {
+
+        console.error(error);
 
         res.status(500).json({
             message: error.message
@@ -1535,6 +1872,57 @@ app.post("/api/applicants/register", async (req, res) => {
     }
 
 });
+
+app.post("/api/applicants/verify", async (req, res) => {
+    try {
+        const { email, verificationCode } = req.body;
+
+        const applicant = await Applicant.findOne({ email });
+
+        if (!applicant) {
+            return res.status(404).json({
+                message: "Applicant not found"
+            });
+        }
+
+        if (applicant.isVerified) {
+            return res.status(400).json({
+                message: "Account is already verified"
+            });
+        }
+
+        if (!applicant.verificationCode ||
+            applicant.verificationCode !== verificationCode) {
+            return res.status(400).json({
+                message: "Invalid verification code"
+            });
+        }
+
+        if (new Date() > applicant.verificationCodeExpires) {
+            return res.status(400).json({
+                message: "Verification code has expired"
+            });
+        }
+
+        applicant.isVerified = true;
+        applicant.verificationCode = undefined;
+        applicant.verificationCodeExpires = undefined;
+
+        await applicant.save();
+
+        res.json({
+            message: "Email verified successfully. You can now log in."
+        });
+
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: error.message
+        });
+    }
+});
+
 
 // Applicant Login
 app.post("/api/applicants/login", async (req, res) => {
@@ -1627,7 +2015,7 @@ app.post("/api/applicants/forgot-password", async (req, res) => {
 
         await transporter.sendMail({
 
-            from: "norvim41@gmail.com",
+            from: process.env.EMAIL_USER,
 
             to: applicant.email,
 
@@ -1731,7 +2119,7 @@ app.get("/api/applicants/applications", verifyApplicant, async (req, res) => {
     }
 
 });
-function verifyApplicant(req, res, next) {
+async function verifyApplicant(req, res, next) {
 
     const token = req.headers.authorization?.split(" ")[1];
 
@@ -1748,6 +2136,21 @@ function verifyApplicant(req, res, next) {
             process.env.JWT_SECRET
         );
 
+        const applicant = await Applicant.findById(decoded.id);
+
+        if (!applicant) {
+            return res.status(401).json({
+                message: "Applicant account not found"
+            });
+        }
+
+        // Check email verification
+        if (!applicant.isVerified) {
+            return res.status(403).json({
+                message: "Please verify your email before accessing your applicant account."
+            });
+        }
+
         req.applicantId = decoded.id;
 
         next();
@@ -1761,7 +2164,6 @@ function verifyApplicant(req, res, next) {
     }
 
 }
-
 app.delete("/api/applicants/account", verifyApplicant, async (req, res) => {
 
     try {
@@ -1832,7 +2234,7 @@ app.get("/api/employers/profile", async (req, res) => {
 });
 
 // Update employer profile
-app.put("/api/employers/profile", upload.single("logo"), async (req, res) => {
+app.put("/api/employers/profile", uploadLogo.single("logo"), async (req, res) => {
 
     try {
 
@@ -1852,7 +2254,7 @@ const updateData = {
 
 if (req.file) {
 
-    updateData.logo = req.file.filename;
+    updateData.logo = "uploads/logos/" + req.file.filename;
 
 }
 
@@ -2077,7 +2479,7 @@ app.put("/api/employer/applications/:id/status", employerAuth, async (req, res) 
 
             await transporter.sendMail({
 
-                from: "yourgmail@gmail.com",
+                from:  process.env.EMAIL_USER,
 
                 to: application.email,
 
@@ -2103,7 +2505,7 @@ Engineering Jobs Team`
 
             await transporter.sendMail({
 
-                from: "yourgmail@gmail.com",
+                from: process.env.EMAIL_USER,
 
                 to: application.email,
 
@@ -2194,7 +2596,7 @@ app.get("/api/applicants/:id", async (req, res) => {
 });
 
 
-app.put("/api/applicants/profile", verifyApplicant, upload.single("profilePhoto"), async (req, res) => {
+app.put("/api/applicants/profile", verifyApplicant, uploadProfilePhoto.single("profilePhoto"), async (req, res) => {
    console.log("I AM INSIDE APPLICANT PROFILE UPDATE");
     try {
         
@@ -2223,7 +2625,7 @@ app.put("/api/applicants/profile", verifyApplicant, upload.single("profilePhoto"
 };
 
 if (req.file) {
-    updateData.profilePhoto = req.file.filename;
+    updateData.profilePhoto = "uploads/profiles/" + req.file.filename;
 }
 
         const applicant = await Applicant.findByIdAndUpdate(
@@ -2639,9 +3041,9 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/uploads", express.static("uploads"));
 
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-mongoose.connect("mongodb://127.0.0.1:27017/engineeringJobs")
+mongoose.connect(process.env.MONGO_URI)
 .then(() => {
     console.log("MongoDB connected successfully");
 })

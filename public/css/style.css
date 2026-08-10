@@ -931,3 +931,182 @@ button:hover {
 .read {
     opacity: 0.7;
 }
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark-mode {
+    background: #111827;
+    color: #f3f4f6;
+}
+
+/* Main containers and cards */
+body.dark-mode .hero,
+body.dark-mode .profile-card,
+body.dark-mode .application-card,
+body.dark-mode .job-card,
+body.dark-mode .employer-header,
+body.dark-mode .top-bar,
+body.dark-mode .dashboard-section,
+body.dark-mode #notificationBox,
+body.dark-mode .dashboard-card,
+body.dark-mode .action-card,
+body.dark-mode .main-header {
+    background: #1f2937;
+    color: #f3f4f6;
+}
+
+/* Text */
+body.dark-mode h2,
+body.dark-mode h3,
+body.dark-mode .application-card h3,
+body.dark-mode .job-card h3 {
+    color: #f3f4f6;
+}
+
+body.dark-mode p,
+body.dark-mode .company-name,
+body.dark-mode .action-card p,
+body.dark-mode .job-card p,
+body.dark-mode .welcome-card p {
+    color: #d1d5db;
+}
+
+/* Navigation */
+body.dark-mode .nav-links a {
+    color: #f3f4f6;
+}
+
+body.dark-mode .nav-links a:hover {
+    color: #60a5fa;
+}
+
+/* Logo */
+body.dark-mode .logo {
+    color: #60a5fa;
+}
+
+/* Inputs */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
+    background: #374151;
+    color: #f3f4f6;
+    border-color: #4b5563;
+}
+
+body.dark-mode input::placeholder,
+body.dark-mode textarea::placeholder {
+    color: #9ca3af;
+}
+
+/* Search */
+body.dark-mode .search-box input,
+body.dark-mode .search-box select {
+    background: #374151;
+    color: #f3f4f6;
+}
+
+/* Cards and shadows */
+body.dark-mode .job-card,
+body.dark-mode .application-card,
+body.dark-mode .dashboard-card,
+body.dark-mode .profile-card,
+body.dark-mode .action-card,
+body.dark-mode .top-bar,
+body.dark-mode .dashboard-section,
+body.dark-mode #notificationBox,
+body.dark-mode .employer-header {
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+/* Status badges */
+body.dark-mode .status-badge {
+    background: #374151;
+    color: #93c5fd;
+}
+
+body.dark-mode .status-badge.pending {
+    background: #78350f;
+    color: #fcd34d;
+}
+
+body.dark-mode .status-badge.reviewed {
+    background: #1e3a8a;
+    color: #93c5fd;
+}
+
+body.dark-mode .status-badge.shortlisted {
+    background: #14532d;
+    color: #86efac;
+}
+
+body.dark-mode .status-badge.rejected {
+    background: #7f1d1d;
+    color: #fca5a5;
+}
+
+body.dark-mode .status-badge.withdrawn {
+    background: #374151;
+    color: #d1d5db;
+}
+
+/* Password button */
+body.dark-mode .password-container button {
+    color: #d1d5db;
+}
+
+/* Read notifications */
+body.dark-mode .read {
+    opacity: 0.8;
+}
+
+/* Back button */
+body.dark-mode .back-btn {
+    background: #4b5563;
+}
+
+body.dark-mode .back-btn:hover {
+    background: #374151;
+}
+
+/* Footer */
+body.dark-mode .footer {
+    background: #030712;
+}
+
+/* Smooth transition */
+body,
+body * {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+#themeToggle {
+    width: auto;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    background: #374151;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#themeToggle:hover {
+    background: #1f2937;
+    transform: none;
+}
+
+body.dark-mode #themeToggle {
+    background: #f3f4f6;
+    color: #111827;
+}
+
+body.dark-mode #themeToggle:hover {
+    background: #d1d5db;
+}

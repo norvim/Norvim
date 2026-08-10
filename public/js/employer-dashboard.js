@@ -7,10 +7,11 @@ if (!employerToken) {
 console.log("employer-dashboard.js connected");
 
 const employer = JSON.parse(localStorage.getItem("employer"));
+console.log(employer);
+console.log(employer.Logo);
 
 if (employer && employer.logo) {
-    document.getElementById("employerLogo").src =
-        "/uploads/" + employer.logo;
+    document.getElementById("employerLogo").src = employer.logo;
 }
 
 
@@ -196,7 +197,7 @@ async function loadApplications() {
 
     ${application.applicantId && application.applicantId.profilePhoto ? `
 
-<img src="/uploads/${application.applicantId.profilePhoto}"
+<img src="${application.applicantId.profilePhoto}"
      width="100"
      height="100"
      style="border-radius:50%; object-fit:cover;">

@@ -4,6 +4,11 @@ console.log("Applicant dashboard connected");
 const token = localStorage.getItem("applicantToken");
 const applicant = JSON.parse(localStorage.getItem("applicant"));
 
+if (applicant && applicant.profilePhoto) {
+    document.getElementById("dashboardPhoto").src =
+        applicant.profilePhoto;
+}
+
 
 if (!token || !applicant) {
 
@@ -16,7 +21,7 @@ if (!token || !applicant) {
 // Show applicant name
 document.getElementById("welcome").innerHTML =
     `Welcome ${applicant.name}`;
-
+/*
 // Show profile photo
 if (applicant.profilePhoto) {
 
@@ -24,7 +29,7 @@ if (applicant.profilePhoto) {
         "/uploads/" + applicant.profilePhoto;
 
 }
-
+*/
 
 
 // Load applications

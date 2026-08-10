@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Your Norvim Account</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 90%;
+            max-width: 400px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #666;
+        }
+
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Verify Your Norvim Account</h2>
+
+    <p>
+        Enter the email address you used to register and the
+        6-digit verification code sent to your email.
+    </p>
+
+    <form id="verifyForm">
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Enter your email"
+            required
+        >
+
+        <input
+            type="text"
+            id="verificationCode"
+            placeholder="Enter 6-digit code"
+            maxlength="6"
+            inputmode="numeric"
+            required
+        >
+
+        <button type="submit" id="verifyButton">
+            Verify Account
+        </button>
+
+    </form>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+    const form = document.getElementById("verifyForm");
+    const savedEmail = localStorage.getItem("verificationEmail");
+
+if (savedEmail) {
+    document.getElementById("email").value = savedEmail;
+}
+
+    const message = document.getElementById("message");
+    const verifyButton = document.getElementById("verifyButton");
+
+    form.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const verificationCode =
+            document.getElementById("verificationCode").value.trim();
+
+        verifyButton.disabled = true;
+        verifyButton.textContent = "Verifying...";
+        message.textContent = "";
+
+        try {
+            const response = await fetch("/api/applicants/verify", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email,
+                    verificationCode
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                message.style.color = "green";
+                message.textContent = data.message;
+
+                setTimeout(() => {
+                    window.location.href = "applicant-login.html";
+                }, 1500);
+
+            } else {
+                message.style.color = "red";
+                message.textContent = data.message;
+                verifyButton.disabled = false;
+                verifyButton.textContent = "Verify Account";
+            }
+
+        } catch (error) {
+            console.error(error);
+
+            message.style.color = "red";
+            message.textContent =
+                "Something went wrong. Please try again.";
+
+            verifyButton.disabled = false;
+            verifyButton.textContent = "Verify Account";
+        }
+    });
+</script>
+
+</body>
+</html>

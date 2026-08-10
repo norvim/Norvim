@@ -18,7 +18,16 @@ async function loadJob() {
 
     try {
 
-        const response = await fetch(`/api/jobs/${jobId}`);
+       /* const response = await fetch(`/api/jobs/${jobId}`);*/
+        const token =
+            localStorage.getItem("employerToken") ||
+            localStorage.getItem("adminToken");
+
+        const response = await fetch(`/api/jobs/${jobId}`, {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        });
 
         const job = await response.json();
 
@@ -52,10 +61,23 @@ form.addEventListener("submit", async function(e) {
     button.textContent = "Saving Changes...";
 
     try {
+        const source = localStorage.getItem("editSource");
 
-        const token = localStorage.getItem("employerToken");
+        const token = 
+           source === "employer"
+           ? localStorage.getItem("employerToken")
+           : localStorage.getItem("adminToken");
+        
+const api =
+    source === "employer" 
+    ? `/api/jobs/${jobId}` 
+    : `/api/admin/jobs/${jobId}`;
 
-const response = await fetch(`/api/admin/jobs/${jobId}`, {
+   console.log("Edit source:", source);
+   console.log("Edit API:", api);
+   console.log("Using admin token:", source === "admin");
+
+    const response = await fetch(api, {
 
     method: "PUT",
 

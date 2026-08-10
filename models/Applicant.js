@@ -23,6 +23,19 @@ const applicantSchema = new mongoose.Schema({
         required: true
     },
 
+    isVerified: {
+    type: Boolean,
+    default: false
+},
+
+verificationCode: {
+    type: String
+},
+
+verificationCodeExpires: {
+    type: Date
+},
+
     profilePhoto: {
     type: String,
     default: ""

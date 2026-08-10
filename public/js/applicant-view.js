@@ -36,7 +36,7 @@ const applicant = data;
         container.innerHTML = `
 
         ${applicant.profilePhoto ? `
-        <img src="/uploads/${applicant.profilePhoto}"
+        <img src="${applicant.profilePhoto}"
         width="120"
         height="120"
         style="border-radius:50%; object-fit:cover;">

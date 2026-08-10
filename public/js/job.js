@@ -35,7 +35,7 @@ if (job.message) {
 
 
        container.innerHTML = `
-       ${job.logo ? `<img src="/uploads/${job.logo}" width="120" alt="Company Logo">` : ""}
+       ${job.logo ? `<img src="${job.logo}" width="120" alt="Company Logo">` : ""}
     <h2>${job.title}</h2>
 
     <p><b>Company:</b> ${job.company}</p>
