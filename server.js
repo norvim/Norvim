@@ -18,6 +18,13 @@ const crypto = require("crypto");
 const Admin = require("./models/Admin");
 const console = require("console");
 const Feedback = require("./models/Feedback");
+const { v2: cloudinary } = require("cloudinary");
+
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
 
 /*const JWT_SECRET = "your_secret_key";*/
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -33,12 +40,14 @@ app.use(express.urlencoded({ extended: true }));
 console.log("NEW SERVER IS RUNNING");
 
 // CV upload setup
-const cvstorage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, "uploads/cvs/");
-    },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname);
+const uploadCV = multer({
+    storage: multer.memoryStorage(),
+    fileFilter: function(req, file, cb) {
+        if (file.mimetype === "application/pdf") {
+            cb(null, true);
+        } else {
+            cb(new Error("Only PDF files are allowed."));
+        }
     }
 });
 
@@ -60,16 +69,6 @@ const profileStorage = multer.diskStorage({
     }
 });
 
-const uploadCV = multer({
-    storage: cvstorage,
-    fileFilter: function(req, file, cb) {
-        if (file.mimetype === "application/pdf") {
-            cb(null, true);
-        } else {
-            cb(new Error("Only PDF files are allowed."));
-        }
-    }
-});
 
 const uploadLogo = multer({
     storage: logostorage,
@@ -104,13 +103,39 @@ app.post("/apply", verifyApplicant, uploadCV.single("cv"), async (req, res) => {
     console.log("APPLY ROUTE HIT");
 
     try {
+
+        let cvUrl = null;
+
+if (req.file) {
+    const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            {
+                folder: "norvim/cvs",
+                resource_type: "image",
+                format: "pdf"
+            },
+            (error, result) => {
+                if (error) {
+                    reject(error);
+                } else {
+                    resolve(result);
+                }
+            }
+        );
+
+        uploadStream.end(req.file.buffer);
+    });
+
+    cvUrl = result.secure_url;
+}
+
         const application = new Application({
             name: req.body.name,
             email: req.body.email,
             phone: req.body.phone,
             job: req.body.job,
             jobTitle: req.body.jobTitle,
-            cv: req.file ? req.file.filename : null,
+            cv: cvUrl,
             applicantId: req.applicantId,
             jobId: req.body.jobId,
         });

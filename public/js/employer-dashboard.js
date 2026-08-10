@@ -215,7 +215,7 @@ async function loadApplications() {
         <p>Status: <strong>${application.status}</strong></p>
 
         <p>
-            <a href="/uploads/cvs/${application.cv}" target="_blank">
+            <a href="${application.cv}" target="_blank">
                 View CV
             </a>
         </p>

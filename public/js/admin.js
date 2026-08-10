@@ -39,7 +39,7 @@ if (!Array.isArray(applications)) {
 
                 <p><b>Status:</b> ${application.status}</p>
 
-                <a href="/uploads/cvs/${application.cv}" target="_blank">
+                <a href="${application.cv}" target="_blank">
                     Open CV
                 </a>
 

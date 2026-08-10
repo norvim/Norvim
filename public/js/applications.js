@@ -35,7 +35,7 @@ async function loadApplications() {
     <option value="Rejected" ${application.status === "Rejected" ? "selected" : ""}>Rejected</option>
 </select>
                       <strong>CV:</strong>
-                      <a href="/uploads/cvs/${application.cv}" target="_blank">
+                      <a href="${application.cv}" target="_blank">
                       Open CV
                       </a>
                      <br><br>
