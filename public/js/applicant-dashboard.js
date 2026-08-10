@@ -21,15 +21,6 @@ if (!token || !applicant) {
 // Show applicant name
 document.getElementById("welcome").innerHTML =
     `Welcome ${applicant.name}`;
-/*
-// Show profile photo
-if (applicant.profilePhoto) {
-
-    document.getElementById("dashboardPhoto").src =
-        "/uploads/" + applicant.profilePhoto;
-
-}
-*/
 
 
 // Load applications

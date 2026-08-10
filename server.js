@@ -51,52 +51,36 @@ const uploadCV = multer({
     }
 });
 
-const logostorage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, "uploads/logos/");
-    },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname);
-    }
-});
-
-const profileStorage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, "uploads/profiles/");
-    },
-    filename: function(req, file, cb) {
-        cb(null, Date.now() + "-" + file.originalname);
-    }
-});
-
-
 const uploadLogo = multer({
-    storage: logostorage,
-        fileFilter: function(req, file, cb) {
-            if (file.mimetype === "image/jpeg" ||
-                 file.mimetype === "image/png" ||
-                 file.mimetype === "image/jpg"
-                ) {
-                cb(null, true);
-            } else {
-                cb(new Error("Only JPG, PNG, and JPEG files are allowed."));
-            }
+    storage: multer.memoryStorage(),
+    fileFilter: function(req, file, cb) {
+        if (
+            file.mimetype === "image/jpeg" ||
+            file.mimetype === "image/png" ||
+            file.mimetype === "image/jpg"
+        ) {
+            cb(null, true);
+        } else {
+            cb(new Error("Only JPG, PNG, and JPEG files are allowed."));
         }
-    });
+    }
+});
 
-    const uploadProfilePhoto = multer({
-        storage: profileStorage,
-        fileFilter: function(req, file, cb) {
-            if (file.mimetype === "image/jpeg" ||
-                 file.mimetype === "image/png" ||
-                 file.mimetype === "image/jpg"
-                ) {
-                cb(null, true);
-            } else {
-                cb(new Error("Only JPG, JPEG, and PNG files are allowed."));
-            }
+const uploadProfilePhoto = multer({
+    storage: multer.memoryStorage(),
+    fileFilter: function(req, file, cb) {
+        if (
+            file.mimetype === "image/jpeg" ||
+            file.mimetype === "image/png" ||
+            file.mimetype === "image/jpg"
+        ) {
+            cb(null, true);
+        } else {
+            cb(new Error("Only JPG, JPEG, and PNG files are allowed."));
         }
-    });
+    }
+});
+
 
 // Save application
 app.post("/apply", verifyApplicant, uploadCV.single("cv"), async (req, res) => {
@@ -551,6 +535,31 @@ next();
 // Create a new job
 app.post("/api/jobs", employerAuth, uploadLogo.single("logo"), async (req, res) => {
     try {
+
+        let logoUrl = null;
+
+        if (req.file) {
+            const result = await new Promise((resolve, reject) => {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: "norvim/logos",
+                        resource_type: "image"
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+
+                uploadStream.end(req.file.buffer);
+            });
+
+            logoUrl = result.secure_url;
+        }
+
         const job = new Job({
             title: req.body.title,
             company: req.body.company,
@@ -558,11 +567,12 @@ app.post("/api/jobs", employerAuth, uploadLogo.single("logo"), async (req, res) 
             location: req.body.location,
             salary: req.body.salary,
             description: req.body.description,
-            logo: req.file ? "uploads/logos/" + req.file.filename : null,
+            logo: logoUrl,
             employerId: req.employer.employerId
         });
 
         await job.save();
+
         const applicants = await Applicant.find({}, "_id");
 
         const notifications = applicants.map(applicant => ({
@@ -590,6 +600,7 @@ app.post("/api/jobs", employerAuth, uploadLogo.single("logo"), async (req, res) 
         });
     }
 });
+
 
 // Get all jobs
 app.get("/api/jobs", async (req, res) => {
@@ -1334,6 +1345,7 @@ app.put("/api/jobs/:id", employerAuth, async (req, res) => {
     }
 
 });
+
 app.post("/api/employers/register", uploadLogo.single("logo"), async (req, res) => {
 
     try {
@@ -1343,11 +1355,36 @@ app.post("/api/employers/register", uploadLogo.single("logo"), async (req, res) 
         const existingEmployer = await Employer.findOne({ email });
 
         if (existingEmployer) {
-
             return res.status(400).json({
                 message: "Email already registered"
             });
+        }
 
+        // Upload logo to Cloudinary
+        let logoUrl = "";
+
+        if (req.file) {
+            const result = await new Promise((resolve, reject) => {
+
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: "norvim/logos",
+                        resource_type: "image"
+                    },
+                    (error, result) => {
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+
+                uploadStream.end(req.file.buffer);
+
+            });
+
+            logoUrl = result.secure_url;
         }
 
         // Hash password
@@ -1367,7 +1404,7 @@ app.post("/api/employers/register", uploadLogo.single("logo"), async (req, res) 
             companyName,
             email,
             password: hashedPassword,
-            logo: req.file ? req.file.filename : "",
+            logo: logoUrl,
 
             isVerified: false,
             verificationCode,
@@ -2267,33 +2304,49 @@ app.put("/api/employers/profile", uploadLogo.single("logo"), async (req, res) =>
 
         const decoded = jwt.verify(token, JWT_SECRET);
 
-       const { companyName, email, phone } = req.body;
+        const { companyName, email, phone } = req.body;
 
-const updateData = {
+        const updateData = {
+            companyName,
+            email,
+            phone
+        };
 
-    companyName,
-    email,
-    phone
+        // Upload new logo to Cloudinary
+        if (req.file) {
 
-};
+            const result = await new Promise((resolve, reject) => {
 
-if (req.file) {
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: "norvim/logos",
+                        resource_type: "image"
+                    },
+                    (error, result) => {
 
-    updateData.logo = "uploads/logos/" + req.file.filename;
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
 
-}
+                    }
+                );
 
-const employer = await Employer.findByIdAndUpdate(
+                uploadStream.end(req.file.buffer);
 
-    decoded.employerId,
+            });
 
-    updateData,
+            updateData.logo = result.secure_url;
+        }
 
-    {
-        new: true
-    }
-
-).select("-password");
+        const employer = await Employer.findByIdAndUpdate(
+            decoded.employerId,
+            updateData,
+            {
+                new: true
+            }
+        ).select("-password");
 
         res.json({
 
@@ -2622,36 +2675,61 @@ app.get("/api/applicants/:id", async (req, res) => {
 
 
 app.put("/api/applicants/profile", verifyApplicant, uploadProfilePhoto.single("profilePhoto"), async (req, res) => {
-   console.log("I AM INSIDE APPLICANT PROFILE UPDATE");
+
+    console.log("I AM INSIDE APPLICANT PROFILE UPDATE");
+
     try {
-        
+
         const {
-    name,
-    email,
-    phone,
-    about,
-    skills,
-    education,
-    experience,
-    linkedin,
-    portfolio
-} = req.body;
+            name,
+            email,
+            phone,
+            about,
+            skills,
+            education,
+            experience,
+            linkedin,
+            portfolio
+        } = req.body;
 
         const updateData = {
-    name,
-    email,
-    phone,
-    about,
-    skills,
-    education,
-    experience,
-    linkedin,
-    portfolio
-};
+            name,
+            email,
+            phone,
+            about,
+            skills,
+            education,
+            experience,
+            linkedin,
+            portfolio
+        };
 
-if (req.file) {
-    updateData.profilePhoto = "uploads/profiles/" + req.file.filename;
-}
+        // Upload profile photo to Cloudinary
+        if (req.file) {
+
+            const result = await new Promise((resolve, reject) => {
+
+                const uploadStream = cloudinary.uploader.upload_stream(
+                    {
+                        folder: "norvim/profiles",
+                        resource_type: "image"
+                    },
+                    (error, result) => {
+
+                        if (error) {
+                            reject(error);
+                        } else {
+                            resolve(result);
+                        }
+                    }
+                );
+
+                uploadStream.end(req.file.buffer);
+
+            });
+
+            updateData.profilePhoto = result.secure_url;
+        }
 
         const applicant = await Applicant.findByIdAndUpdate(
             req.applicantId,
@@ -2662,13 +2740,14 @@ if (req.file) {
             }
         ).select("-password");
 
-
         res.json({
             message: "Profile updated successfully",
             applicant
         });
 
     } catch (error) {
+
+        console.error(error);
 
         res.status(500).json({
             message: error.message
@@ -2677,6 +2756,7 @@ if (req.file) {
     }
 
 });
+
 
 app.put("/api/applicants/change-password", verifyApplicant, async (req, res) => {
 
