@@ -39,7 +39,7 @@ if (!Array.isArray(applications)) {
 
                 <p><b>Status:</b> ${application.status}</p>
 
-                <a href="/uploads/${application.cv}" target="_blank">
+                <a href="/uploads/cvs/${application.cv}" target="_blank">
                     Open CV
                 </a>
 
@@ -427,4 +427,10 @@ async function deleteAllActivities() {
     } catch (error) {
         console.error("Error deleting all activities:", error);
     }
+}
+
+function logoutAdmin() {
+
+    localStorage.removeItem("adminToken");
+    window.location.href = "admin-login.html";
 }
