@@ -1,3 +1,7 @@
+/* =========================================================
+   NORVIM - GLOBAL STYLES
+========================================================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -6,8 +10,47 @@
 }
 
 body {
-    background: #f4f4f4;
+    padding: 20px;
+    background: #f5f5f5;
+    color: #222;
 }
+
+h2 {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 28px;
+}
+
+h3 {
+    margin-top: 20px;
+}
+
+button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+button:hover {
+    opacity: 0.85;
+    transform: translateY(-2px);
+}
+
+input,
+select,
+textarea {
+    font-family: Arial, sans-serif;
+}
+
+
+/* =========================================================
+   ORIGINAL HEADER / NAVIGATION
+========================================================= */
 
 header {
     background: #0d6efd;
@@ -35,20 +78,138 @@ nav ul li a {
     text-decoration: none;
 }
 
-.hero {
-    text-align: center;
-    padding: 60px 20px;
+
+/* =========================================================
+   NORVIM MODERN HEADER / NAVIGATION
+========================================================= */
+
+.main-header {
     background: white;
+    padding: 15px 40px;
+    box-shadow: 0 3px 15px rgba(0, 0, 0, 0.08);
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 28px;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+.site-logo {
+    height: 55px;
+    width: auto;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.nav-links a:hover {
+    color: #2563eb;
+}
+
+.nav-links a.active {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    margin-right: 7px;
+    font-size: 18px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: 90px 20px 130px;
+    text-align: center;
+    color: white;
+
+    background: linear-gradient(
+        125deg,
+        #60a5fa 0%,
+        #2563eb 38%,
+        #1e40af 68%,
+        #6d28d9 100%
+    );
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    width: 120%;
+    height: 75%;
+    left: -10%;
+    bottom: -30%;
+    background: rgba(255, 255, 255, 0.14);
+    border-radius: 50%;
+    transform: rotate(-6deg);
+    z-index: -1;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    width: 125%;
+    height: 55%;
+    left: -12%;
+    bottom: -25%;
+    background: rgba(76, 29, 149, 0.25);
+    border-radius: 50%;
+    transform: rotate(-7deg);
+    z-index: -1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+    margin: auto;
 }
 
 .hero h2 {
-    font-size: 2.2rem;
-    margin-bottom: 10px;
+    font-size: 42px;
+    line-height: 1.15;
+    font-weight: 800;
+    margin-bottom: 20px;
 }
 
 .hero p {
-    margin-bottom: 20px;
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 35px;
 }
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 #search {
     width: 300px;
@@ -58,155 +219,195 @@ nav ul li a {
     border-radius: 5px;
 }
 
+.search-box {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.search-box input,
+.search-box select {
+    padding: 15px;
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    min-width: 280px;
+}
+
+
+/* =========================================================
+   JOBS
+========================================================= */
+
 #jobs {
-display: grid;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0;
+    display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 30px;
+    gap: 25px;
 }
 
 .job-card {
     background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
+}
+
+.job-card:hover {
+    transform: translateY(-5px);
 }
 
 .job-card h3 {
-    color: #0d6efd;
+    color: #2563eb;
+    margin-bottom: 10px;
 }
 
 .job-card p {
+    color: #555;
     margin: 8px 0;
 }
 
 .job-card button {
     margin-top: 15px;
     padding: 10px 18px;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
 }
 
-.job-card button:hover {
-    background: #0b5ed7;
-} 
+
+/* =========================================================
+   PROFILE CARD
+========================================================= */
 
 .profile-card {
-
     max-width: 700px;
     margin: 30px auto;
     padding: 25px;
     border-radius: 10px;
     background: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
 
 .profile-card img {
-
     display: block;
     margin: 0 auto 20px;
-
 }
-
 
 .profile-card h3 {
-
     text-align: center;
     font-size: 24px;
-
 }
-
 
 .profile-card p {
-
     font-size: 16px;
     line-height: 1.6;
-
 }
 
-.application-card,
-.job-card {
+.profile-card button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 25px;
+    border-radius: 6px;
+}
 
+
+/* =========================================================
+   APPLICATION CARDS
+========================================================= */
+
+.application-card {
     background: white;
     padding: 20px;
+    border-radius: 14px;
     margin: 15px 0;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-
+    border-left: 5px solid #2563eb;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
 }
 
+.application-card:hover {
+    transform: translateY(-3px);
+}
 
-.application-card button,
-.job-card button {
+.application-card h3 {
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: #222;
+}
 
+.application-card p {
+    margin: 8px 0;
+}
+
+.application-card strong {
+    color: #333;
+}
+
+.application-card button {
     padding: 8px 15px;
     margin: 5px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-
-}
-
-h2 {
-
-    text-align: center;
-    margin-top: 25px;
-    font-size: 28px;
-
 }
 
 
-h3 {
+/* =========================================================
+   APPLICATION STATUS
+========================================================= */
 
-    margin-top: 20px;
+.application-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 15px;
+}
 
+.company-name {
+    color: #666;
+    margin-top: 5px;
+    font-size: 15px;
+}
+
+.status-badge {
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.status-badge.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.reviewed {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.status-badge.shortlisted {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.status-badge.rejected {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.status-badge.withdrawn {
+    background: #e5e7eb;
+    color: #374151;
 }
 
 
-body {
-
-    padding: 20px;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-
-}
-
-
-button {
-
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.2s ease;
-
-}
-
-
-button:hover {
-
-    opacity: 0.85;
-    transform: translateY(-2px);
-
-}
-
-
-button:hover {
-
-    opacity: 0.85;
-
-}
+/* =========================================================
+   EMPLOYER HEADER
+========================================================= */
 
 .employer-header {
-
     display: flex;
     align-items: center;
     gap: 20px;
@@ -214,87 +415,98 @@ button:hover {
     background: white;
     border-radius: 10px;
     margin-bottom: 20px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
-
 .employer-header img {
-
     width: 80px;
     height: 80px;
     object-fit: cover;
     border-radius: 50%;
-
 }
-
 
 .employer-header h2 {
-
     margin: 0;
-
 }
 
-.profile-card button {
 
-    display: block;
-    margin: 20px auto;
-    padding: 10px 25px;
-    border-radius: 6px;
-    cursor: pointer;
+/* =========================================================
+   DASHBOARD BASIC CONTAINERS
+========================================================= */
 
-}
-
-#jobs,
 #applications {
-
     max-width: 900px;
     margin: 20px auto;
-
 }
 
-@media (max-width: 600px) {
-
-    body {
-        padding: 10px;
-    }
-
-
-    .employer-header {
-
-        flex-direction: column;
-        text-align: center;
-
-    }
-
-
-    .profile-card {
-
-        width: 90%;
-        padding: 15px;
-
-    }
-
-
-    .application-card,
-    .job-card {
-
-        padding: 15px;
-
-    }
-
-
-    button {
-
-        width: 100%;
-        margin: 8px 0;
-
-    }
-
+.dashboard-container {
+    max-width: 1100px;
+    margin: 30px auto;
 }
+
+.dashboard-section {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px auto;
+    max-width: 900px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card h3 {
+    margin-top: 0;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.card-header h3 {
+    margin: 0;
+}
+
+
+/* =========================================================
+   WELCOME CARD
+========================================================= */
+
+.welcome-card {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 25px;
+    max-width: 900px;
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+}
+
+.welcome-card h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+}
+
+.welcome-card p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
 
 .top-bar {
-
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -302,457 +514,105 @@ button:hover {
     padding: 15px 25px;
     border-radius: 12px;
     margin-bottom: 25px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
 
 .top-bar h2 {
-
     margin: 0;
     font-size: 24px;
-
 }
-
 
 .top-actions {
-
     display: flex;
     gap: 10px;
-
 }
 
-
 .top-actions button {
-
     width: auto;
     padding: 10px 18px;
     border-radius: 8px;
-
 }
 
-.dashboard-section {
 
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    margin: 20px auto;
-    max-width: 900px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
-}
-
+/* =========================================================
+   NOTIFICATIONS
+========================================================= */
 
 #notificationBox {
-
     background: white;
     padding: 15px;
     border-radius: 10px;
     max-width: 900px;
     margin: 15px auto;
-
 }
 
-.welcome-card {
-
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 900px;
-    margin: 20px auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
-}
-
-
-.welcome-card h3 {
-
-    margin: 0 0 10px 0;
-    font-size: 22px;
-
-}
-
-
-.welcome-card p {
-
-    margin: 0;
-    color: #555;
-
-}
-
-.dashboard-card {
-
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-    max-width: 900px;
-    margin: 20px auto;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-
-}
-
-
-.dashboard-card h3 {
-
-    margin-top: 0;
-
-}
-
-.application-card {
-
-    background: white;
-    padding: 20px;
-    border-radius: 14px;
-    margin: 15px 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    transition: transform 0.2s ease;
-
-}
-
-
-.application-card:hover {
-
-    transform: translateY(-3px);
-
-}
-
-
-.application-card h3 {
-
-    margin-top: 0;
-
-}
-
-
-.application-card p {
-
-    margin: 8px 0;
-
-}
-
-.dashboard-container {
-
-    max-width: 1100px;
-    margin: 30px auto;
-
-}
-
-.card-header {
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-
-}
-
-.card-header h3 {
-
-    margin: 0;
-
-}
-
-.dashboard-card {
-
-    background: #fff;
-    border-radius: 15px;
-    padding: 25px;
-    margin-bottom: 25px;
-    box-shadow: 0 8px 25px rgba(0,0,0,.08);
-
-}
-
-.welcome-card {
-
-    background: linear-gradient(135deg,#2563eb,#1d4ed8);
-    color: white;
-    border-radius: 15px;
-    padding: 30px;
-    margin-bottom: 25px;
-    box-shadow: 0 8px 25px rgba(37,99,235,.35);
-
-}
-
-.welcome-card p {
-
-    color: rgba(255,255,255,.9);
-
-}
-
-.application-header {
-
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 15px;
-
-}
-
-.company-name {
-
-    color: #666;
-    margin-top: 5px;
-    font-size: 15px;
-
-}
-
-.status-badge {
-
-    background: #dbeafe;
-    color: #1d4ed8;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 13px;
+.unread {
     font-weight: bold;
-
+    border-left: 5px solid orange;
 }
 
-.application-card {
-
-    border-left: 5px solid #2563eb;
-
-}
-
-.application-card h3 {
-
-    margin-bottom: 5px;
-    color: #222;
-
-}
-
-.application-card strong {
-
-    color: #333;
-
-}
-
-.status-badge.pending {
-
-    background: #fef3c7;
-    color: #92400e;
-
-}
-
-.status-badge.reviewed {
-
-    background: #dbeafe;
-    color: #1e40af;
-
-}
-
-.status-badge.shortlisted {
-
-    background: #dcfce7;
-    color: #166534;
-
-}
-
-.status-badge.rejected {
-
-    background: #fee2e2;
-    color: #b91c1c;
-
-}
-
-.status-badge.withdrawn {
-
-    background: #e5e7eb;
-    color: #374151;
-
-}
-
-.main-header {
-
-    background: white;
-    padding: 15px 40px;
-    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-
+.read {
+    opacity: 0.7;
 }
 
 
-.navbar {
+/* =========================================================
+   EMPLOYER DASHBOARD TOP
+========================================================= */
 
+.dashboard-top {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    max-width: 1100px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
-
-.logo {
-
+.dashboard-title h1 {
+    margin: 0;
     font-size: 28px;
-    font-weight: bold;
-    color: #2563eb;
+}
 
+.dashboard-top .home-btn {
+    flex-shrink: 0;
 }
 
 
-.nav-links {
-
-    display: flex;
-    list-style: none;
-    gap: 25px;
-    margin: 0;
-    padding: 0;
-
-}
-
-
-.nav-links a {
-
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-
-}
-
-
-.nav-links a:hover {
-
-    color: #2563eb;
-
-}
-
-.hero {
-
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    padding: 80px 20px;
-    text-align: center;
-    color: white;
-
-}
-
-
-.hero-content {
-
-    max-width: 900px;
-    margin: auto;
-
-}
-
-
-.hero h2 {
-
-    font-size: 42px;
-    margin-bottom: 20px;
-
-}
-
-
-.hero p {
-
-    font-size: 18px;
-    margin-bottom: 35px;
-
-}
-
-
-.search-box {
-
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    flex-wrap: wrap;
-
-}
-
-
-.search-box input,
-.search-box select {
-
-    padding: 15px;
-    border-radius: 8px;
-    border: none;
-    font-size: 15px;
-    min-width: 280px;
-
-}
-
-#jobs {
-
-    max-width: 1100px;
-    margin: 40px auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
-
-}
-
-
-.job-card {
-
-    background: white;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-    transition: 0.3s ease;
-
-}
-
-
-.job-card:hover {
-
-    transform: translateY(-5px);
-
-}
-
-
-.job-card h3 {
-
-    color: #2563eb;
-    margin-bottom: 10px;
-
-}
-
-
-.job-card p {
-
-    color: #555;
-    margin: 8px 0;
-
-}
+/* =========================================================
+   ACTION SECTION
+========================================================= */
 
 .action-section {
-
     max-width: 1100px;
     margin: 50px auto;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 25px;
-
 }
 
-
 .action-card {
-
     background: white;
     padding: 30px;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
 }
-
 
 .action-card h3 {
-
     color: #2563eb;
     margin-bottom: 15px;
-
 }
-
 
 .action-card p {
-
     color: #555;
     margin-bottom: 25px;
-
 }
 
-
 .action-card a {
-
     display: inline-block;
     background: #2563eb;
     color: white;
@@ -760,145 +620,58 @@ button:hover {
     border-radius: 8px;
     text-decoration: none;
     font-weight: bold;
-
 }
-
 
 .action-card a:hover {
-
     background: #1d4ed8;
-
 }
 
-.footer {
 
+/* =========================================================
+   FOOTER
+========================================================= */
+
+.footer {
     background: #111827;
     color: white;
     padding: 40px 20px;
     margin-top: 50px;
     text-align: center;
-
 }
-
 
 .footer h3 {
-
     font-size: 28px;
     margin-bottom: 10px;
-
 }
-
 
 .footer p {
-
     color: #d1d5db;
-
 }
-
 
 .footer-links {
-
     margin: 20px 0;
-
 }
 
-
 .footer-links a {
-
     color: white;
     text-decoration: none;
     margin: 0 12px;
-
 }
-
 
 .footer-links a:hover {
-
     color: #60a5fa;
-
 }
-
 
 .copyright {
-
     margin-top: 25px;
     font-size: 14px;
-
 }
 
-@media (max-width: 700px) {
-
-    body {
-        font-size: 16px;
-    }
-
-    .navbar {
-        flex-direction: column;
-        gap: 17px;
-    }
-
-    .nav-links {
-        flex-direction: column;
-        text-align: center;
-        gap: 17px;
-    }
-
-    .nav-links a {
-        font-size: 16px;
-    }
-
-    .hero {
-        padding: 60px 20px;
-    }
-
-    .hero h2 {
-        font-size: 32px;
-    }
-
-    .hero p {
-        font-size: 17px;
-    }
-
-    .search-box input,
-    .search-box select {
-        width: 100%;
-        min-width: unset;
-        font-size: 16px;
-        padding: 16px;
-    }
-
-    #jobs {
-        padding: 0 15px;
-    }
-
-    .job-card {
-        padding: 22px;
-    }
-
-    .job-card p {
-        font-size: 16px;
-    }
-
-    .action-section {
-        padding: 0 15px;
-    }
-
-    .action-card {
-        padding: 25px;
-    }
-
-    .action-card p {
-        font-size: 16px;
-    }
-
-    button {
-        font-size: 16px;
-    }
-
-}
+/* =========================================================
+   BACK BUTTON
+========================================================= */
 
 .back-btn {
-
     background: #374151;
     color: white;
     padding: 10px 20px;
@@ -906,22 +679,16 @@ button:hover {
     border-radius: 8px;
     cursor: pointer;
     margin: 20px;
-
 }
-
 
 .back-btn:hover {
-
     background: #111827;
-
 }
 
-.site-logo {
 
-    height: 55px;
-    width: auto;
-
-}
+/* =========================================================
+   PASSWORD CONTAINER
+========================================================= */
 
 .password-container {
     display: flex;
@@ -944,25 +711,70 @@ button:hover {
     font-size: 16px;
 }
 
-.unread {
-    font-weight: bold;
-    border-left: 5px solid orange;
+
+/* =========================================================
+   DASHBOARD HOME BUTTON
+========================================================= */
+
+.home-btn {
+    width: auto !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 10px 16px !important;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
 }
-.read {
-    opacity: 0.7;
+
+.home-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.home-icon {
+    font-size: 18px;
+    line-height: 1;
 }
 
 
-/* =========================
+/* =========================================================
+   THEME TOGGLE
+========================================================= */
+
+#themeToggle {
+    width: auto;
+    padding: 8px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    background: #374151;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+#themeToggle:hover {
+    background: #1f2937;
+    transform: none;
+}
+
+
+/* =========================================================
    DARK MODE
-========================= */
+========================================================= */
 
 body.dark-mode {
     background: #111827;
     color: #f3f4f6;
 }
 
-/* Main containers and cards */
+
+/* Main containers */
+
 body.dark-mode .hero,
 body.dark-mode .profile-card,
 body.dark-mode .application-card,
@@ -973,12 +785,15 @@ body.dark-mode .dashboard-section,
 body.dark-mode #notificationBox,
 body.dark-mode .dashboard-card,
 body.dark-mode .action-card,
-body.dark-mode .main-header {
+body.dark-mode .main-header,
+body.dark-mode .dashboard-top {
     background: #1f2937;
     color: #f3f4f6;
 }
 
+
 /* Text */
+
 body.dark-mode h2,
 body.dark-mode h3,
 body.dark-mode .application-card h3,
@@ -989,12 +804,13 @@ body.dark-mode .job-card h3 {
 body.dark-mode p,
 body.dark-mode .company-name,
 body.dark-mode .action-card p,
-body.dark-mode .job-card p,
-body.dark-mode .welcome-card p {
+body.dark-mode .job-card p {
     color: #d1d5db;
 }
 
+
 /* Navigation */
+
 body.dark-mode .nav-links a {
     color: #f3f4f6;
 }
@@ -1003,12 +819,16 @@ body.dark-mode .nav-links a:hover {
     color: #60a5fa;
 }
 
+
 /* Logo */
+
 body.dark-mode .logo {
     color: #60a5fa;
 }
 
+
 /* Inputs */
+
 body.dark-mode input,
 body.dark-mode select,
 body.dark-mode textarea {
@@ -1022,14 +842,18 @@ body.dark-mode textarea::placeholder {
     color: #9ca3af;
 }
 
+
 /* Search */
+
 body.dark-mode .search-box input,
 body.dark-mode .search-box select {
     background: #374151;
     color: #f3f4f6;
 }
 
-/* Cards and shadows */
+
+/* Card shadows */
+
 body.dark-mode .job-card,
 body.dark-mode .application-card,
 body.dark-mode .dashboard-card,
@@ -1038,11 +862,14 @@ body.dark-mode .action-card,
 body.dark-mode .top-bar,
 body.dark-mode .dashboard-section,
 body.dark-mode #notificationBox,
-body.dark-mode .employer-header {
+body.dark-mode .employer-header,
+body.dark-mode .dashboard-top {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
 }
 
+
 /* Status badges */
+
 body.dark-mode .status-badge {
     background: #374151;
     color: #93c5fd;
@@ -1073,17 +900,23 @@ body.dark-mode .status-badge.withdrawn {
     color: #d1d5db;
 }
 
+
 /* Password button */
+
 body.dark-mode .password-container button {
     color: #d1d5db;
 }
 
+
 /* Read notifications */
+
 body.dark-mode .read {
     opacity: 0.8;
 }
 
+
 /* Back button */
+
 body.dark-mode .back-btn {
     background: #4b5563;
 }
@@ -1092,35 +925,15 @@ body.dark-mode .back-btn:hover {
     background: #374151;
 }
 
+
 /* Footer */
+
 body.dark-mode .footer {
     background: #030712;
 }
 
-/* Smooth transition */
-body,
-body * {
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
-}
 
-#themeToggle {
-    width: auto;
-    padding: 8px 14px;
-    border-radius: 20px;
-    font-size: 14px;
-    background: #374151;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#themeToggle:hover {
-    background: #1f2937;
-    transform: none;
-}
+/* Theme toggle */
 
 body.dark-mode #themeToggle {
     background: #f3f4f6;
@@ -1129,4 +942,340 @@ body.dark-mode #themeToggle {
 
 body.dark-mode #themeToggle:hover {
     background: #d1d5db;
+}
+
+
+/* =========================================================
+   SMOOTH THEME TRANSITIONS
+========================================================= */
+
+body,
+body * {
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+/* =========================================================
+   MOBILE / RESPONSIVE STYLES
+========================================================= */
+
+@media (max-width: 700px) {
+
+    body {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    /* Navigation */
+
+    .navbar {
+        flex-direction: column;
+        gap: 17px;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        text-align: center;
+        gap: 17px;
+    }
+
+    .nav-links a {
+        font-size: 16px;
+    }
+
+
+    /* Hero */
+
+    .hero {
+        padding: 65px 20px 110px;
+
+        background: linear-gradient(
+            135deg,
+            #60a5fa 0%,
+            #2563eb 42%,
+            #1e40af 70%,
+            #7c3aed 100%
+        );
+    }
+
+    .hero::before {
+        width: 150%;
+        height: 55%;
+        left: -25%;
+        bottom: -20%;
+        transform: rotate(-8deg);
+    }
+
+    .hero::after {
+        width: 150%;
+        height: 40%;
+        left: -25%;
+        bottom: -15%;
+        transform: rotate(-9deg);
+    }
+
+    .hero h2 {
+        font-size: 32px;
+        line-height: 1.2;
+    }
+
+    .hero p {
+        font-size: 16px;
+        line-height: 1.6;
+    }
+
+
+    /* Search */
+
+    .search-box input,
+    .search-box select {
+        width: 100%;
+        min-width: unset;
+        font-size: 16px;
+        padding: 16px;
+    }
+
+
+    /* Jobs */
+
+    #jobs {
+        padding: 0 15px;
+    }
+
+    .job-card {
+        padding: 22px;
+    }
+
+    .job-card p {
+        font-size: 16px;
+    }
+
+
+    /* Actions */
+
+    .action-section {
+        padding: 0 15px;
+    }
+
+    .action-card {
+        padding: 25px;
+    }
+
+    .action-card p {
+        font-size: 16px;
+    }
+
+
+    /* Buttons */
+
+    button {
+        font-size: 16px;
+        width: 100%;
+        margin: 8px 0;
+    }
+
+    .top-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .top-actions button {
+        width: auto;
+        margin: 0;
+    }
+
+    .home-btn {
+        width: auto !important;
+        padding: 11px 16px !important;
+        margin: 0;
+    }
+
+
+    /* Employer header */
+
+    .employer-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+
+    /* Profile */
+
+    .profile-card {
+        width: 90%;
+        padding: 15px;
+    }
+
+
+    /* Cards */
+
+    .application-card {
+        padding: 15px;
+    }
+
+
+    /* Dashboard top */
+
+    .dashboard-top {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+        margin: 15px 10px;
+    }
+
+    .dashboard-title h1 {
+        font-size: 24px;
+    }
+
+    .dashboard-top .home-btn {
+        width: auto !important;
+    }
+}
+
+
+/* =========================================================
+   MOBILE LOGIN FORM
+========================================================= */
+
+@media (max-width: 700px) {
+
+    body:has(#loginForm) {
+        padding: 20px;
+    }
+
+    body:has(#loginForm) h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+    #loginForm {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    #loginForm > input {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 48px;
+        padding: 13px 14px;
+        font-size: 16px;
+    }
+
+    #loginForm .password-container {
+        width: 100%;
+    }
+
+    #loginForm .password-container input {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 48px;
+        padding: 13px 40px 13px 14px;
+        font-size: 16px;
+    }
+
+    #loginForm .password-container button {
+        width: auto;
+        min-height: auto;
+        margin: 0 0 0 -35px;
+        font-size: 18px;
+    }
+
+    #loginBtn {
+        width: 100%;
+        min-height: 48px;
+        margin-top: 18px;
+        font-size: 16px;
+    }
+
+    #loginForm p {
+        font-size: 16px;
+        margin: 20px 0;
+    }
+
+    .back-btn {
+        width: auto;
+        font-size: 16px;
+        padding: 12px 20px;
+        margin: 15px 0;
+    }
+}
+
+
+/* =========================================================
+   MOBILE REGISTRATION FORM
+========================================================= */
+
+@media (max-width: 700px) {
+
+    body:has(#registerForm) {
+        padding: 20px;
+    }
+
+    body:has(#registerForm) h2 {
+        font-size: 28px;
+        margin-bottom: 25px;
+    }
+
+    #registerForm {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    #registerForm > input {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 48px;
+        padding: 13px 14px;
+        font-size: 16px;
+    }
+
+    #registerForm .password-container {
+        width: 100%;
+    }
+
+    #registerForm .password-container input {
+        width: 100%;
+        box-sizing: border-box;
+        min-height: 48px;
+        padding: 13px 40px 13px 14px;
+        font-size: 16px;
+    }
+
+    #registerForm .password-container button {
+        width: auto;
+        min-height: auto;
+        margin: 0 0 0 -35px;
+        font-size: 18px;
+    }
+
+    #registerBtn {
+        width: 100%;
+        min-height: 48px;
+        margin-top: 18px;
+        font-size: 16px;
+    }
+
+    #registerForm .back-btn {
+        width: 100%;
+        min-height: 48px;
+        margin: 12px 0 0;
+        font-size: 16px;
+    }
+}
+
+
+/* =========================================================
+   REGISTRATION FILE INPUT
+========================================================= */
+
+#registerForm input[type="file"] {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+    font-size: 16px;
 }
