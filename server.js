@@ -130,42 +130,35 @@ if (req.file) {
             message: `${application.name} applied for ${application.jobTitle}.`,
         });
 
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: "pmax53725@gmail.com",
-            subject: "New Job Application",
-            text: `
-A new application has been received.
+       await transporter({
+    to: "pmax53725@gmail.com",
+    subject: "New Job Application",
+    html: `
+        <p>A new application has been received.</p>
 
-Name: ${application.name}
-Email: ${application.email}
-Phone: ${application.phone}
-Job: ${application.jobTitle}
-`
-        });
+        <p><strong>Name:</strong> ${application.name}</p>
+        <p><strong>Email:</strong> ${application.email}</p>
+        <p><strong>Phone:</strong> ${application.phone}</p>
+        <p><strong>Job:</strong> ${application.jobTitle}</p>
+    `
+});
 
 
-  await transporter.sendMail({
-
-    from: process.env.EMAIL_USER,
-
+  await transporter({
     to: application.email,
-
     subject: "Application Received",
-    
+    html: `
+        <p>Dear ${application.name},</p>
 
-    text: `Dear ${application.name},
+        <p>Thank you for applying for the <strong>${application.jobTitle}</strong> position.</p>
 
-Thank you for applying for the ${application.jobTitle} position.
+        <p>We have successfully received your application and CV.</p>
 
-We have successfully received your application and CV.
+        <p>Our recruitment team will review your application and contact you if you are shortlisted.</p>
 
-Our recruitment team will review your application and contact you if you are Shortlisted.
-
-Best regards,
-
-Rm nyaga`
-
+        <p>Best regards,<br>
+        Norvim</p>
+    `
 });
 
 
@@ -281,27 +274,27 @@ app.put("/api/applications/:id", employerAuth, async (req, res) => {
 
             try {
 
-                await transporter.sendMail({
+                await transporter({
+    to: application.email,
+    subject: "Congratulations! You have been Shortlisted",
+    html: `
+        <p>Dear ${application.name},</p>
 
-                    from: process.env.EMAIL_USER,
+        <p><strong>Congratulations!</strong></p>
 
-                    to: application.email,
+        <p>
+            We are pleased to inform you that you have been shortlisted
+            for the <strong>${application.jobTitle}</strong> position.
+        </p>
 
-                    subject: "Congratulations! You have been Shortlisted",
+        <p>
+            Our recruitment team will contact you soon with the next steps.
+        </p>
 
-                    text: `Dear ${application.name},
-
-Congratulations!
-
-We are pleased to inform you that you have been Shortlisted for the ${application.jobTitle} position.
-
-Our recruitment team will contact you soon with the next steps.
-
-Best regards,
-
-Norvim`
-
-                });
+        <p>Best regards,<br>
+        Norvim</p>
+    `
+});
 
                 console.log("Shortlisted email sent successfully");
 
@@ -319,27 +312,32 @@ Norvim`
 
             try {
 
-                await transporter.sendMail({
+                await transporter({
+    to: application.email,
+    subject: "Update on your job application",
+    html: `
+        <p>Dear ${application.name},</p>
 
-                    from: process.env.EMAIL_USER,
+        <p>
+            Thank you for taking the time to apply for the
+            <strong>${application.jobTitle}</strong> position.
+        </p>
 
-                    to: application.email,
+        <p>
+            After careful consideration, we regret to inform you that
+            you have not been selected for this role.
+        </p>
 
-                    subject: "Update on your job application",
+        <p>
+            We appreciate your interest in our company and encourage you
+            to apply for future opportunities.
+        </p>
 
-                    text: `Dear ${application.name},
+        <p>We wish you all the best.</p>
 
-Thank you for taking the time to apply for the ${application.jobTitle} position.
-
-After careful consideration, we regret to inform you that you have not been selected for this role.
-
-We appreciate your interest in our company and encourage you to apply for future opportunities.
-
-We wish you all the best.
-
-Norvim`
-
-                });
+        <p>Norvim</p>
+    `
+});
 
             } catch (emailError) {
 
@@ -944,28 +942,27 @@ app.put("/api/admin/applications/:id", adminAuth, async (req, res) => {
 
             try {
 
-                await transporter.sendMail({
+                await transporter({
+    to: application.email,
+    subject: "Congratulations! You have been Shortlisted",
+    html: `
+        <p>Dear ${application.name},</p>
 
-                    from: process.env.EMAIL_USER,
+        <p><strong>Congratulations!</strong></p>
 
-                    to: application.email,
+        <p>
+            We are pleased to inform you that you have been shortlisted
+            for the <strong>${application.jobTitle}</strong> position.
+        </p>
 
-                    subject: "Congratulations! You have been Shortlisted",
+        <p>
+            Our recruitment team will contact you soon with the next steps.
+        </p>
 
-                    text: `Dear ${application.name},
-
-Congratulations!
-
-We are pleased to inform you that you have been Shortlisted for the ${application.jobTitle} position.
-
-Our recruitment team will contact you soon with the next steps.
-
-Best regards,
-
-Norvim`
-
-                });
-
+        <p>Best regards,<br>
+        Norvim</p>
+    `
+});
             } catch (emailError) {
 
                 console.log("SHORTLISTED EMAIL ERROR:", emailError);
@@ -979,28 +976,32 @@ Norvim`
 
             try {
 
-                await transporter.sendMail({
+               await transporter({
+    to: application.email,
+    subject: "Update on your job application",
+    html: `
+        <p>Dear ${application.name},</p>
 
-                    from: process.env.EMAIL_USER,
+        <p>
+            Thank you for taking the time to apply for the
+            <strong>${application.jobTitle}</strong> position.
+        </p>
 
-                    to: application.email,
+        <p>
+            After careful consideration, we regret to inform you that
+            you have not been selected for this role.
+        </p>
 
-                    subject: "Update on your job application",
+        <p>
+            We appreciate your interest in our company and encourage you
+            to apply for future opportunities.
+        </p>
 
-                    text: `Dear ${application.name},
+        <p>We wish you all the best.</p>
 
-Thank you for taking the time to apply for the ${application.jobTitle} position.
-
-After careful consideration, we regret to inform you that you have not been selected for this role.
-
-We appreciate your interest in our company and encourage you to apply for future opportunities.
-
-We wish you all the best.
-
-Norvim`
-
-                });
-
+        <p>Norvim</p>
+    `
+});
             } catch (emailError) {
 
                 console.log("REJECTED EMAIL ERROR:", emailError);
@@ -1419,29 +1420,26 @@ app.post("/api/employers/register", uploadLogo.single("logo"), async (req, res) 
         });
 
         // Send verification email
-        await transporter.sendMail({
+        await transporter({
+    to: email,
+    subject: "Verify your Norvim employer account",
+    html: `
+        <p>Hello ${companyName},</p>
 
-            from: process.env.EMAIL_USER,
+        <p>Your Norvim employer verification code is:</p>
 
-            to: email,
+        <h2>${verificationCode}</h2>
 
-            subject: "Verify your Norvim employer account",
+        <p>This code expires in 10 minutes.</p>
 
-            text: `Hello ${companyName},
+        <p>
+            If you did not create this employer account, you can ignore this email.
+        </p>
 
-Your Norvim employer verification code is:
-
-${verificationCode}
-
-This code expires in 10 minutes.
-
-If you did not create this employer account, you can ignore this email.
-
-Thank you,
-Norvim`
-
-        });
-
+        <p>Thank you,<br>
+        Norvim</p>
+    `
+});
         res.status(201).json({
 
             message:
@@ -1635,32 +1633,29 @@ app.post("/api/employers/forgot-password", async (req, res) => {
 
 
         const resetLink =
-        `http://localhost:3000/employer-reset-password.html?token=${resetToken}`;
+            `https://norvim.onrender.com/employer-reset-password.html?token=${resetToken}`;
 
+await transporter({
+    to: employer.email,
+    subject: "Employer Password Reset",
+    html: `
+        <p>Hello ${employer.companyName},</p>
 
-        await transporter.sendMail({
+        <p>You requested to reset your password.</p>
 
-            from: process.env.EMAIL_USER,
+        <p>
+            Click the link below:
+        </p>
 
-            to: employer.email,
+        <p>
+            <a href="${resetLink}">Reset your password</a>
+        </p>
 
-            subject: "Employer Password Reset",
+        <p>This link expires in 15 minutes.</p>
 
-            text: `Hello ${employer.companyName},
-
-You requested to reset your password.
-
-Click the link below:
-
-${resetLink}
-
-This link expires in 15 minutes.
-
-If you did not request this, ignore this email.`
-
-        });
-
-
+        <p>If you did not request this, you can ignore this email.</p>
+    `
+});
         res.json({
             message: "Password reset link sent."
         });
@@ -1901,24 +1896,26 @@ app.post("/api/applicants/register", async (req, res) => {
         });
 
         // Send verification email
-        await transporter.sendMail({
-            from: process.env.EMAIL_USER,
-            to: email,
-            subject: "Verify your Norvim account",
-            text: `Hello ${name},
+        await transporter({
+    to: email,
+    subject: "Verify your Norvim account",
+    html: `
+        <p>Hello ${name},</p>
 
-Your Norvim verification code is:
+        <p>Your Norvim verification code is:</p>
 
-${verificationCode}
+        <h2>${verificationCode}</h2>
 
-This code expires in 10 minutes.
+        <p>This code expires in 10 minutes.</p>
 
-If you did not create this account, you can ignore this email.
+        <p>
+            If you did not create this account, you can ignore this email.
+        </p>
 
-Thank you,
-Norvim`
-        });
-
+        <p>Thank you,<br>
+        Norvim</p>
+    `
+});
         res.status(201).json({
             message: "Registration successful. Please check your email for the verification code."
         });
@@ -2073,29 +2070,27 @@ app.post("/api/applicants/forgot-password", async (req, res) => {
         await applicant.save();
 
         const resetLink =
-            `http://localhost:3000/reset-password.html?token=${resetToken}`;
+    `https://norvim.onrender.com/reset-password.html?token=${resetToken}`;
 
-        await transporter.sendMail({
+await transporter({
+    to: applicant.email,
+    subject: "Password Reset",
+    html: `
+        <p>Hello ${applicant.name},</p>
 
-            from: process.env.EMAIL_USER,
+        <p>You requested to reset your password.</p>
 
-            to: applicant.email,
+        <p>Click the link below to reset it:</p>
 
-            subject: "Password Reset",
+        <p>
+            <a href="${resetLink}">Reset your password</a>
+        </p>
 
-            text: `Hello ${applicant.name},
+        <p>This link will expire in 15 minutes.</p>
 
-You requested to reset your password.
-
-Click the link below to reset it:
-
-${resetLink}
-
-This link will expire in 15 minutes.
-
-If you did not request this, please ignore this email.`
-
-        });
+        <p>If you did not request this, please ignore this email.</p>
+    `
+});
 
         res.json({
             message: "Password reset link sent successfully."
@@ -2555,52 +2550,55 @@ app.put("/api/employer/applications/:id/status", employerAuth, async (req, res) 
 
         if (application.status === "Shortlisted") {
 
-            await transporter.sendMail({
+           await transporter({
+    to: application.email,
+    subject: "Congratulations! You have been Shortlisted",
+    html: `
+        <p>Dear ${application.name},</p>
 
-                from:  process.env.EMAIL_USER,
+        <p><strong>Congratulations!</strong></p>
 
-                to: application.email,
+        <p>
+            We are pleased to inform you that you have been shortlisted
+            for the <strong>${application.jobTitle}</strong> position.
+        </p>
 
-                subject: "Congratulations! You have been Shortlisted",
+        <p>
+            Our recruitment team will contact you soon with the next steps.
+        </p>
 
-                text: `Dear ${application.name},
-
-Congratulations!
-
-We are pleased to inform you that you have been Shortlisted for the ${application.jobTitle} position.
-
-Our recruitment team will contact you soon with the next steps.
-
-Best regards,
-
-Engineering Jobs Team`
-
-            });
+        <p>Best regards,<br>
+        Norvim</p>
+    `
+});
 
         }
 
         if (application.status === "Rejected") {
 
-            await transporter.sendMail({
+           await transporter({
+    to: application.email,
+    subject: "Update on your job application",
+    html: `
+        <p>Dear ${application.name},</p>
 
-                from: process.env.EMAIL_USER,
+        <p>
+            Thank you for taking the time to apply for the
+            <strong>${application.jobTitle}</strong> position.
+        </p>
 
-                to: application.email,
+        <p>
+            After careful consideration, we regret to inform you that
+            you have not been selected.
+        </p>
 
-                subject: "Update on your job application",
+        <p>
+            We appreciate your interest and wish you all the best.
+        </p>
 
-                text: `Dear ${application.name},
-
-Thank you for taking the time to apply for the ${application.jobTitle} position.
-
-After careful consideration, we regret to inform you that you have not been selected.
-
-We appreciate your interest and wish you all the best.
-
-Engineering Jobs Team`
-
-            });
-
+        <p>Norvim</p>
+    `
+});
         }
 
         res.json({
