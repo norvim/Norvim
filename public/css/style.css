@@ -1279,3 +1279,35 @@ body * {
     padding: 12px;
     font-size: 16px;
 }
+
+/* =========================================================
+   HOMEPAGE MOBILE NAVIGATION - HORIZONTAL
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .main-header .nav-links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 12px 18px;
+        width: 100%;
+    }
+
+    .main-header .nav-links a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        white-space: nowrap;
+        font-size: 14px;
+    }
+
+    .main-header .nav-icon {
+        width: auto;
+        margin-right: 4px;
+        font-size: 16px;
+    }
+
+}
