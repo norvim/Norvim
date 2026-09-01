@@ -18,6 +18,10 @@ const crypto = require("crypto");
 const Admin = require("./models/Admin");
 const console = require("console");
 const Feedback = require("./models/Feedback");
+const WorkerProfile = require("./models/workerProfile");
+const ServiceCategory = require("./models/serviceCategory");
+const LabourRequest = require("./models/LabourRequest");
+const LabourBooking = require("./models/LabourBooking");
 const { v2: cloudinary } = require("cloudinary");
 
 cloudinary.config({
@@ -3146,9 +3150,407 @@ app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 3000;
 
+
+
+// ==================== LABOUR MARKETPLACE API ====================
+// Full marketplace MVP: worker discovery, requests, matching and work lifecycle.
+
+function normaliseCoords(value) {
+    if (!value || !Array.isArray(value.coordinates) || value.coordinates.length !== 2) return null;
+    const lng = Number(value.coordinates[0]);
+    const lat = Number(value.coordinates[1]);
+    if (!Number.isFinite(lng) || !Number.isFinite(lat) || lng < -180 || lng > 180 || lat < -90 || lat > 90) return null;
+    return [lng, lat];
+}
+
+function buildLocation(body) {
+    const location = body && typeof body === "object" ? body : {};
+    const coordinates = normaliseCoords(location.coordinates || location);
+    return {
+        country: String(location.country || "Kenya").trim(),
+        county: String(location.county || "").trim(),
+        area: String(location.area || "").trim(),
+        ...(coordinates ? { coordinates: { type: "Point", coordinates } } : {})
+    };
+}
+
+async function cleanMarketplaceGeoData() {
+    // Older marketplace documents may have a GeoJSON `type: Point` without
+    // the required coordinate array. Remove that malformed field so the
+    // 2dsphere indexes can be built safely.
+    for (const Model of [WorkerProfile, LabourRequest]) {
+        const docs = await Model.find({ $or: [{ "location.coordinates": { $exists: true } }, { "location.town": { $exists: true } }] }).select("_id location.coordinates location.town").lean();
+        for (const doc of docs) {
+            const coords = doc.location?.coordinates;
+            const valid = coords && coords.type === "Point" && Array.isArray(coords.coordinates) && coords.coordinates.length === 2 &&
+                Number.isFinite(Number(coords.coordinates[0])) && Number.isFinite(Number(coords.coordinates[1])) &&
+                Number(coords.coordinates[0]) >= -180 && Number(coords.coordinates[0]) <= 180 &&
+                Number(coords.coordinates[1]) >= -90 && Number(coords.coordinates[1]) <= 90;
+            const update = {};
+            if (!valid && coords !== undefined) update.$unset = { "location.coordinates": 1 };
+            if (doc.location?.town) update.$unset = { ...(update.$unset || {}), "location.town": 1 };
+            if (Object.keys(update).length) {
+                await Model.updateOne({ _id: doc._id }, update);
+                console.log(`Cleaned marketplace location fields in ${Model.modelName}: ${doc._id}`);
+            }
+        }
+    }
+    await WorkerProfile.createIndexes();
+    await LabourRequest.createIndexes();
+}
+
+
+async function notifyApplicant(applicantId, message) {
+    try {
+        if (applicantId) await Notification.create({ applicantId, message });
+    } catch (error) {
+        console.error("Marketplace notification error:", error);
+    }
+}
+
+// Public: list active service categories.
+app.get("/api/marketplace/categories", async (req, res) => {
+    try {
+        const categories = await ServiceCategory.find({ isActive: true }).sort({ name: 1 }).lean();
+        res.json(categories);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to load service categories." });
+    }
+});
+
+// Public: discover active workers. Supports category, county/area and radius search.
+app.get("/api/marketplace/workers", async (req, res) => {
+    try {
+        const filter = { isActive: true, "availability.status": "Available" };
+        if (req.query.category) filter.services = req.query.category;
+        if (req.query.county) filter["location.county"] = new RegExp(`^${String(req.query.county).replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}$`, "i");
+        if (req.query.area) filter["location.area"] = new RegExp(String(req.query.area).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "i");
+
+        const lng = Number(req.query.lng);
+        const lat = Number(req.query.lat);
+        const radiusKm = Math.min(Math.max(Number(req.query.radiusKm) || 25, 1), 500);
+        if (Number.isFinite(lng) && Number.isFinite(lat) && lng >= -180 && lng <= 180 && lat >= -90 && lat <= 90) {
+            filter["location.coordinates"] = {
+                $near: {
+                    $geometry: { type: "Point", coordinates: [lng, lat] },
+                    $maxDistance: radiusKm * 1000
+                }
+            };
+        }
+
+        const workers = await WorkerProfile.find(filter)
+            .populate("applicantId", "name phone profilePhoto")
+            .populate("services", "name description")
+            .limit(50)
+            .lean();
+
+        res.json(workers);
+    } catch (error) {
+        console.error("Marketplace workers error:", error);
+        res.status(500).json({ message: "Failed to find workers." });
+    }
+});
+
+// Public: view one worker profile.
+app.get("/api/marketplace/workers/:id", async (req, res) => {
+    try {
+        const profile = await WorkerProfile.findOne({ _id: req.params.id, isActive: true })
+            .populate("applicantId", "name phone profilePhoto")
+            .populate("services", "name description")
+            .lean();
+        if (!profile) return res.status(404).json({ message: "Worker not found." });
+        res.json(profile);
+    } catch (error) {
+        res.status(400).json({ message: "Invalid worker ID." });
+    }
+});
+
+// Applicant: create or update marketplace worker profile.
+app.get("/api/marketplace/worker-profile", verifyApplicant, async (req, res) => {
+    try {
+        const profile = await WorkerProfile.findOne({ applicantId: req.applicantId })
+            .populate("services")
+            .lean();
+        if (!profile) return res.status(404).json({ message: "Worker profile not found." });
+        res.json(profile);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to load worker profile." });
+    }
+});
+
+app.post("/api/marketplace/worker-profile", verifyApplicant, async (req, res) => {
+    try {
+        if (await WorkerProfile.exists({ applicantId: req.applicantId })) {
+            return res.status(409).json({ message: "Worker profile already exists." });
+        }
+        const applicant = await Applicant.findById(req.applicantId).lean();
+        if (!applicant) return res.status(404).json({ message: "Applicant account not found." });
+
+        const services = Array.isArray(req.body.services) ? req.body.services : [];
+        const validServices = await ServiceCategory.countDocuments({ _id: { $in: services }, isActive: true });
+        if (services.length && validServices !== services.length) return res.status(400).json({ message: "One or more selected services are invalid." });
+
+        const profile = await WorkerProfile.create({
+            applicantId: req.applicantId,
+            displayName: String(req.body.displayName || applicant.name || "").trim(),
+            bio: req.body.bio,
+            profilePhoto: req.body.profilePhoto,
+            services,
+            skills: Array.isArray(req.body.skills) ? req.body.skills : [],
+            experience: req.body.experience,
+            location: buildLocation(req.body.location),
+            availability: req.body.availability || undefined,
+            pricing: req.body.pricing || undefined
+        });
+        await profile.populate("services");
+        res.status(201).json({ message: "Worker profile created successfully.", profile });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: error.message || "Failed to create worker profile." });
+    }
+});
+
+app.put("/api/marketplace/worker-profile", verifyApplicant, async (req, res) => {
+    try {
+        const updates = {};
+        ["displayName", "bio", "profilePhoto", "skills", "experience", "availability", "pricing", "isActive"].forEach(field => {
+            if (req.body[field] !== undefined) updates[field] = req.body[field];
+        });
+        if (req.body.location !== undefined) updates.location = buildLocation(req.body.location);
+        if (req.body.services !== undefined) {
+            if (!Array.isArray(req.body.services)) return res.status(400).json({ message: "Services must be an array." });
+            const valid = await ServiceCategory.countDocuments({ _id: { $in: req.body.services }, isActive: true });
+            if (valid !== req.body.services.length) return res.status(400).json({ message: "One or more selected services are invalid." });
+            updates.services = req.body.services;
+        }
+        const profile = await WorkerProfile.findOneAndUpdate({ applicantId: req.applicantId }, { $set: updates }, { new: true, runValidators: true }).populate("services");
+        if (!profile) return res.status(404).json({ message: "Worker profile not found." });
+        res.json({ message: "Worker profile updated successfully.", profile });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: error.message || "Failed to update worker profile." });
+    }
+});
+
+// Applicant: create a labour request.
+app.post("/api/marketplace/requests", verifyApplicant, async (req, res) => {
+    try {
+        const serviceCategoryId = req.body.serviceCategoryId;
+        if (!serviceCategoryId || !req.body.title || !req.body.description) {
+            return res.status(400).json({ message: "Service, title and description are required." });
+        }
+        const category = await ServiceCategory.findOne({ _id: serviceCategoryId, isActive: true });
+        if (!category) return res.status(400).json({ message: "Invalid service category." });
+
+        let requestedWorkerId = null;
+        if (req.body.workerId) {
+            const worker = await WorkerProfile.findOne({ _id: req.body.workerId, isActive: true, services: serviceCategoryId });
+            if (!worker) return res.status(400).json({ message: "Selected worker does not offer this service or is unavailable." });
+            requestedWorkerId = worker._id;
+        }
+
+        const request = await LabourRequest.create({
+            requesterId: req.applicantId,
+            serviceCategoryId,
+            requestedWorkerId,
+            title: String(req.body.title).trim(),
+            description: String(req.body.description).trim(),
+            location: buildLocation(req.body.location),
+            budget: req.body.budget || undefined
+        });
+        res.status(201).json({ message: "Labour request posted successfully.", request });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: error.message || "Failed to post labour request." });
+    }
+});
+
+// Applicant: own labour requests.
+app.get("/api/marketplace/my-requests", verifyApplicant, async (req, res) => {
+    try {
+        const requests = await LabourRequest.find({ requesterId: req.applicantId })
+            .populate("serviceCategoryId", "name")
+            .populate({ path: "workerId", populate: [{ path: "services", select: "name" }, { path: "applicantId", select: "name phone" }] })
+            .sort({ createdAt: -1 })
+            .lean();
+        res.json(requests);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to load your labour requests." });
+    }
+});
+
+// Worker: nearby open requests matching one of their services.
+app.get("/api/marketplace/worker-requests", verifyApplicant, async (req, res) => {
+    try {
+        const worker = await WorkerProfile.findOne({ applicantId: req.applicantId, isActive: true });
+        if (!worker) return res.status(404).json({ message: "Create a worker profile first." });
+        if (!worker.services.length) return res.json([]);
+
+        const filter = { serviceCategoryId: { $in: worker.services }, status: "pending", $or: [{ requestedWorkerId: null }, { requestedWorkerId: worker._id }] };
+        const coords = worker.location?.coordinates?.coordinates;
+        if (Array.isArray(coords) && coords.length === 2) {
+            filter["location.coordinates"] = {
+                $near: {
+                    $geometry: { type: "Point", coordinates: coords },
+                    $maxDistance: (worker.availability?.serviceRadiusKm || 10) * 1000
+                }
+            };
+        }
+        const requests = await LabourRequest.find(filter)
+            .populate("serviceCategoryId", "name")
+            .populate("requesterId", "name phone profilePhoto")
+            .limit(50)
+            .sort({ createdAt: -1 })
+            .lean();
+        res.json(requests);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Failed to load nearby labour requests." });
+    }
+});
+
+// Worker: accept a pending request assigned atomically to this worker.
+app.put("/api/marketplace/requests/:id/accept", verifyApplicant, async (req, res) => {
+    try {
+        const worker = await WorkerProfile.findOne({ applicantId: req.applicantId, isActive: true });
+        if (!worker) return res.status(404).json({ message: "Worker profile not found." });
+        if (worker.availability.status !== "Available") return res.status(400).json({ message: "Set your worker status to Available first." });
+
+        const request = await LabourRequest.findOneAndUpdate(
+            { _id: req.params.id, status: "pending", serviceCategoryId: { $in: worker.services }, $or: [{ requestedWorkerId: null }, { requestedWorkerId: worker._id }] },
+            { $set: { workerId: worker._id, status: "accepted" } },
+            { new: true }
+        );
+        if (!request) return res.status(409).json({ message: "This request is no longer available." });
+
+        const booking = await LabourBooking.create({ requestId: request._id, requesterId: request.requesterId, workerId: worker._id });
+        await notifyApplicant(request.requesterId, "A worker has accepted your labour request.");
+        res.json({ message: "Request accepted.", request, booking });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: error.message || "Failed to accept request." });
+    }
+});
+
+// Worker: decline a request (it remains available to other workers).
+app.put("/api/marketplace/requests/:id/decline", verifyApplicant, async (req, res) => {
+    try {
+        const worker = await WorkerProfile.findOne({ applicantId: req.applicantId, isActive: true });
+        if (!worker) return res.status(404).json({ message: "Worker profile not found." });
+        const request = await LabourRequest.findOne({ _id: req.params.id, status: "pending", serviceCategoryId: { $in: worker.services } });
+        if (!request) return res.status(404).json({ message: "Request not found or already assigned." });
+        res.json({ message: "Request declined for you." });
+    } catch (error) {
+        res.status(400).json({ message: "Invalid request ID." });
+    }
+});
+
+// Worker/customer: advance a booking through its lifecycle, with ownership checks.
+app.put("/api/marketplace/bookings/:id/status", verifyApplicant, async (req, res) => {
+    try {
+        const allowed = ["in_progress", "completed", "cancelled"];
+        const nextStatus = String(req.body.status || "");
+        if (!allowed.includes(nextStatus)) return res.status(400).json({ message: "Invalid booking status." });
+
+        const booking = await LabourBooking.findById(req.params.id);
+        if (!booking) return res.status(404).json({ message: "Booking not found." });
+
+        const worker = await WorkerProfile.findOne({ _id: booking.workerId, applicantId: req.applicantId });
+        const isRequester = String(booking.requesterId) === String(req.applicantId);
+        if (!worker && !isRequester) return res.status(403).json({ message: "You do not have access to this booking." });
+
+        if (nextStatus === "in_progress" && !worker) return res.status(403).json({ message: "Only the worker can start the work." });
+        if (nextStatus === "completed" && !worker && !isRequester) return res.status(403).json({ message: "Not authorized." });
+
+        booking.status = nextStatus;
+        if (nextStatus === "in_progress") {
+            booking.startedAt = new Date();
+            await LabourRequest.findByIdAndUpdate(booking.requestId, { status: "in_progress" });
+        }
+        if (nextStatus === "completed") {
+            booking.completedAt = new Date();
+            await LabourRequest.findByIdAndUpdate(booking.requestId, { status: "completed" });
+        }
+        if (nextStatus === "cancelled") await LabourRequest.findByIdAndUpdate(booking.requestId, { status: "cancelled" });
+        await booking.save();
+
+        const otherParty = worker ? booking.requesterId : (await WorkerProfile.findById(booking.workerId))?.applicantId;
+        await notifyApplicant(otherParty, `Labour booking status changed to ${nextStatus.replace("_", " ")}.`);
+        res.json({ message: "Booking status updated.", booking });
+    } catch (error) {
+        console.error(error);
+        res.status(400).json({ message: error.message || "Failed to update booking." });
+    }
+});
+
+app.get("/api/marketplace/bookings", verifyApplicant, async (req, res) => {
+    try {
+        const worker = await WorkerProfile.findOne({ applicantId: req.applicantId });
+        const workerIds = worker ? [worker._id] : [];
+        const bookings = await LabourBooking.find({ $or: [{ requesterId: req.applicantId }, { workerId: { $in: workerIds } }] })
+            .populate("requestId")
+            .populate("workerId")
+            .populate("requesterId", "name phone")
+            .sort({ createdAt: -1 })
+            .lean();
+        res.json(bookings);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to load bookings." });
+    }
+});
+
+// Admin: create categories.
+app.post("/api/marketplace/categories", adminAuth, async (req, res) => {
+    try {
+        const name = String(req.body.name || "").trim();
+        if (!name) return res.status(400).json({ message: "Category name is required." });
+        const category = await ServiceCategory.create({ name, description: String(req.body.description || "").trim() });
+        res.status(201).json({ message: "Service category created successfully.", category });
+    } catch (error) {
+        if (error.code === 11000) return res.status(409).json({ message: "That service category already exists." });
+        res.status(400).json({ message: error.message || "Failed to create service category." });
+    }
+});
+
+// Admin: enable/disable a category.
+app.put("/api/marketplace/categories/:id", adminAuth, async (req, res) => {
+    try {
+        const category = await ServiceCategory.findByIdAndUpdate(req.params.id, { $set: { isActive: Boolean(req.body.isActive) } }, { new: true, runValidators: true });
+        if (!category) return res.status(404).json({ message: "Category not found." });
+        res.json({ message: "Category updated.", category });
+    } catch (error) {
+        res.status(400).json({ message: "Invalid category ID." });
+    }
+});
+
+// =============================================================
+
 mongoose.connect(process.env.MONGO_URI)
-.then(() => {
+.then(async () => {
     console.log("MongoDB connected successfully");
+    await cleanMarketplaceGeoData();
+    console.log("Marketplace geospatial indexes ready");
+    const defaultMarketplaceCategories = [
+        ["Electrician", "Electrical installation, repair and maintenance"],
+        ["Plumber", "Plumbing installation and repair"],
+        ["Mason", "Masonry and building work"],
+        ["Carpenter", "Carpentry, furniture and woodwork"],
+        ["Painter", "Painting and finishing work"],
+        ["Welder", "Metal fabrication and welding"],
+        ["Tiler", "Floor and wall tiling"],
+        ["Cleaner", "Home, office and commercial cleaning"],
+        ["Gardener", "Gardening and landscaping"],
+        ["Mechanic", "Vehicle repair and maintenance"],
+        ["Driver", "Driving and transport services"],
+        ["Solar Installation", "Solar power installation and maintenance"],
+        ["CCTV Installation", "CCTV and security camera installation"]
+    ];
+    for (const [name, description] of defaultMarketplaceCategories) {
+        await ServiceCategory.updateOne({ name }, { $setOnInsert: { name, description, isActive: true } }, { upsert: true });
+    }
+    console.log("Marketplace service categories ready");
 })
 .catch((error) => {
     console.log("MongoDB connection error:", error);

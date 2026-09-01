@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Norvim Labour Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/marketplace.css">
+</head>
+<body class="market-page">
+  <header class="market-header">
+    <a class="market-brand" href="index.html"><img src="images/logo.png" alt="Norvim"><span>Labour Marketplace</span></a>
+    <nav class="market-main-nav">
+      <a class="active" href="marketplace.html">Home</a>
+      <a href="#workers">Find Workers</a>
+      <a href="marketplace-request.html">Post a Request</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="market-header-actions">
+      <a class="market-login" href="applicant-login.html">Login</a>
+      <a class="market-signup" href="applicant-register.html">Sign Up</a>
+      <button class="market-menu" type="button" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="market-hero-home">
+      <div class="market-hero-copy">
+        <span class="market-eyebrow">Kenya's labour marketplace</span>
+        <h1>Find skilled workers.<br><strong>Get things done.</strong></h1>
+        <p>Connect with trusted local professionals for home, business and project needs — quickly, simply and safely.</p>
+        <div class="market-hero-actions">
+          <a class="market-btn market-primary" href="#workers">Find a Worker</a>
+          <a class="market-btn market-light" href="marketplace-request.html">Post a Labour Request</a>
+        </div>
+        <div class="market-trust-row">
+          <span>✓ Trusted professionals</span><span>✓ Fast matching</span><span>✓ Secure platform</span>
+        </div>
+      </div>
+      <div class="market-hero-photo-wrap">
+        <img src="images/marketplace-worker-hero.png" alt="Skilled Norvim marketplace worker">
+      </div>
+    </section>
+
+    <section class="market-search-panel" aria-label="Find workers">
+      <form id="searchForm" class="market-search-form">
+        <label><span>Service</span><select id="category"><option value="">All services</option></select></label>
+        <label><span>County</span><input id="county" placeholder="e.g. Nairobi"></label>
+        <label><span>Area</span><input id="area" placeholder="e.g. Umoja 3"></label>
+        <label class="radius-field"><span>Radius</span><select id="radius"><option value="5">5 km</option><option value="10">10 km</option><option value="25" selected>25 km</option><option value="50">50 km</option></select></label>
+        <button class="market-btn market-primary" type="submit">Find Workers →</button>
+        <button class="market-location-btn" type="button" id="nearMe">⌖ Use my location</button>
+      </form>
+      <div id="message" aria-live="polite"></div>
+    </section>
+
+    <section class="market-section" id="services">
+      <div class="market-section-heading"><div><span class="market-kicker">Explore</span><h2>Popular Services</h2><p>Choose the professional you need.</p></div><a href="#services">View all services →</a></div>
+      <div class="market-service-grid">
+        <button data-service-name="Electrician">⚡<span>Electrician</span></button>
+        <button data-service-name="Plumber">♨<span>Plumber</span></button>
+        <button data-service-name="Mason">▦<span>Mason</span></button>
+        <button data-service-name="Carpenter">⌁<span>Carpenter</span></button>
+        <button data-service-name="Painter">▰<span>Painter</span></button>
+        <button data-service-name="Welder">✦<span>Welder</span></button>
+        <button data-service-name="Cleaner">✧<span>Cleaner</span></button>
+        <button data-service-name="Solar Installation">☀<span>Solar</span></button>
+        <button data-service-name="CCTV Installation">◉<span>CCTV</span></button>
+      </div>
+    </section>
+
+    <section class="market-how" id="how-it-works">
+      <div class="market-section-heading centered"><div><span class="market-kicker">Simple by design</span><h2>How Norvim Works</h2><p>From your need to a skilled professional in a few simple steps.</p></div></div>
+      <div class="market-steps">
+        <article><b>01</b><div class="step-icon">⌕</div><h3>Tell us what you need</h3><p>Choose a service and describe the work you want done.</p></article>
+        <article><b>02</b><div class="step-icon">◎</div><h3>Find the right worker</h3><p>Discover available professionals near your location.</p></article>
+        <article><b>03</b><div class="step-icon">✓</div><h3>Get the work done</h3><p>Choose a worker, agree on the job and get it completed.</p></article>
+      </div>
+    </section>
+
+    <section class="market-section" id="workers">
+      <div class="market-section-heading"><div><span class="market-kicker">Ready to help</span><h2>Available Workers</h2><p>Skilled people ready for your next job.</p></div><a href="#workers">Refresh results ↻</a></div>
+      <div id="workersGrid" class="market-worker-grid"></div>
+    </section>
+
+    <section class="market-worker-cta">
+      <div><span class="market-kicker">For skilled professionals</span><h2>Have a skill people need?</h2><p>Create your Worker Profile and start receiving labour opportunities.</p></div>
+      <a class="market-btn market-yellow" href="worker-profile-setup.html">Become a Worker →</a>
+    </section>
+  </main>
+
+  <footer class="market-footer">
+    <div><a class="market-brand footer-brand" href="index.html"><img src="images/logo.png" alt="Norvim"><span>Labour Marketplace</span></a><p>Connecting skilled people with people who need great work done.</p></div>
+    <div class="footer-links"><a href="marketplace.html">Home</a><a href="#workers">Find Workers</a><a href="marketplace-request.html">Post Request</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+    <small>© 2026 Norvim. All rights reserved.</small>
+  </footer>
+  <script src="js/marketplace.js"></script>
+</body>
+</html>
