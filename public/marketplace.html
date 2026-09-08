@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Norvim Labour Marketplace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/marketplace.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body class="market-page">
+  <header class="market-header">
+    <a class="market-brand" href="index.html"><img src="images/logo.png" alt="Norvim"><span>Labour Marketplace</span></a>
+    <nav class="market-main-nav">
+      <a class="active" href="marketplace.html">Home</a>
+      <a href="#workers">Find Workers</a>
+      <a href="marketplace-request.html">Post a Request</a>
+      <a href="#how-it-works">How It Works</a><a href="#comments">Comments</a>
+      <a href="about.html">About</a>
+    </nav>
+    <div class="market-header-actions">
+      <a class="market-login" href="applicant-login.html">Login</a>
+      <a class="market-signup" href="applicant-register.html">Sign Up</a>
+      <button class="market-menu" type="button" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="market-hero-home">
+      <div class="market-hero-copy"><span class="market-eyebrow">Kenya's labour marketplace</span><h1>Find skilled workers.<br><strong>Get things done.</strong></h1><p>Connect with local professionals or post the work you need done.</p><div class="market-hero-actions"><a class="market-btn market-primary" href="#workers">Find a Worker</a><a class="market-btn market-light" href="marketplace-request.html">Post a Labour Request</a></div></div>
+      <div class="market-hero-photo-wrap"><img src="images/marketplace-worker-hero.png" alt="Skilled Norvim marketplace worker"></div>
+    </section>
+
+    <section class="market-search-panel" aria-label="Find workers"><form id="searchForm" class="market-search-form"><label><span>Service</span><select id="category"><option value="">All services</option></select></label><label><span>County</span><input id="county" placeholder="e.g. Nairobi"></label><label><span>Area</span><input id="area" placeholder="e.g. your area"></label><label class="radius-field"><span>Radius</span><select id="radius"><option value="5">5 km</option><option value="10">10 km</option><option value="25" selected>25 km</option><option value="50">50 km</option></select></label><button class="market-btn market-primary" type="submit">Find Workers →</button><button class="market-location-btn" type="button" id="nearMe">⌖ Use my location</button></form><div id="message" aria-live="polite"></div><div id="locationMap" class="market-location-map" aria-label="Your exact location map"></div></section>
+
+    <section class="market-section" id="workers"><div class="market-section-heading"><div><span class="market-kicker">Nearby professionals</span><h2>Workers Near You</h2><p>See available skilled workers and how far they are from you.</p></div></div><div id="workersGrid" class="market-worker-grid"></div></section>
+
+    <section class="market-action-grid">
+      <article class="market-action-card"><span class="market-kicker">For skilled professionals</span><h2>Are you a skilled worker?</h2><p>Create your Norvim Worker Profile so customers can find you when you are available.</p><a class="market-btn market-primary" href="worker-profile-setup.html">Create Worker Profile →</a></article>
+      <article class="market-action-card request-action"><span class="market-kicker">Need work done?</span><h2>Post a Labour Request</h2><p>Describe the job you need and let nearby workers discover it.</p><a class="market-btn market-yellow" href="marketplace-request.html">Post a Labour Request →</a></article>
+    </section>
+
+    <section class="market-section" id="requests"><div class="market-section-heading"><div><span class="market-kicker">Jobs available now</span><h2>Labour Requests</h2><p>Open jobs posted by people who need work done.</p></div></div><div id="requestsGrid" class="market-request-grid"></div></section>
+
+    <section class="market-section" id="services"><div class="market-section-heading"><div><span class="market-kicker">Explore</span><h2>Popular Services</h2><p>Choose the professional you need.</p></div></div><div class="market-service-grid"><button data-service-name="Electrician">⚡<span>Electrician</span></button><button data-service-name="Plumber">♨<span>Plumber</span></button><button data-service-name="Mason">▦<span>Mason</span></button><button data-service-name="Carpenter">⌁<span>Carpenter</span></button><button data-service-name="Painter">▰<span>Painter</span></button><button data-service-name="Welder">✦<span>Welder</span></button><button data-service-name="Cleaner">✧<span>Cleaner</span></button><button data-service-name="Solar Installation">☀<span>Solar</span></button><button data-service-name="CCTV Installation">◉<span>CCTV</span></button></div></section>
+
+
+    <section class="market-section" id="comments"><div class="market-section-heading"><div><span class="market-kicker">Community</span><h2>What People Say About Norvim</h2><p>Real comments from the Norvim community.</p></div></div><div id="publicComments" class="market-comments"></div><div class="market-card market-comment-form"><h3>Leave a comment</h3><p class="market-muted">Log in to share your experience. Comments may be moderated for spam or abuse.</p><textarea id="publicCommentText" maxlength="1000" placeholder="Write your comment..."></textarea><button id="publicCommentBtn" class="market-btn market-primary" type="button">Post Comment</button><p id="commentMessage"></p></div></section>
+
+    <section class="norvim-premium-home premium-marketplace-home" id="marketplacePremium">
+      <div class="premium-home-inner">
+        <div class="premium-home-copy"><span class="premium-home-kicker">NORVIM PLUS · MARKETPLACE</span><h2>Stand out. Win more work.</h2><p>Make your worker profile more visible and show customers that you are serious about your services.</p><ul><li>✓ Premium worker profile presentation</li><li>✓ Premium badge</li><li>✓ Priority presentation where applicable</li></ul><div class="premium-home-price"><strong>KSh 100</strong><span>/ 30 days</span></div><a class="premium-home-btn premium-open" href="#" data-premium-product="marketplace">Upgrade to Marketplace Premium →</a></div>
+        <div class="premium-home-art"><div class="premium-crown">♛</div><strong>NORVIM</strong><span>MARKETPLACE PREMIUM</span><div class="premium-line"></div></div>
+      </div>
+    </section>
+
+    <section class="market-how" id="how-it-works"><div class="market-section-heading centered"><div><span class="market-kicker">Simple by design</span><h2>How Norvim Labour Marketplace Works</h2><p>Whether you need a worker or want to offer your skills, Norvim keeps the process simple.</p></div></div><div class="market-steps"><article><b>01</b><div class="step-icon">⌕</div><h3>Post or find</h3><p>Post the work you need or browse available workers nearby.</p></article><article><b>02</b><div class="step-icon">◎</div><h3>Connect</h3><p>Review the details, choose the right person and make contact.</p></article><article><b>03</b><div class="step-icon">✓</div><h3>Get it done</h3><p>Agree on the job, complete the work and update its status.</p></article></div></section>
+  </main>
+
+
+  <footer class="market-footer">
+    <div><a class="market-brand footer-brand" href="index.html"><img src="images/logo.png" alt="Norvim"><span>Labour Marketplace</span></a><p>Connecting skilled people with people who need great work done.</p></div>
+    <div class="footer-links"><a href="marketplace.html">Home</a><a href="#workers">Find Workers</a><a href="marketplace-request.html">Post Request</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+    <small>© 2026 Norvim. All rights reserved.</small>
+  </footer>
+  <script src="js/marketplace.js?v=20260902-inda3"></script>
+<script src="js/home-premium.js?v=20260908-1"></script>
+</body>
+</html>
