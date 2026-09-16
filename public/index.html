@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Norvim - Engineering Jobs & Labour Marketplace</title>
+        <meta name="description" content="Norvim connects engineering professionals, employers and local skilled workers through jobs and a labour marketplace in Kenya and beyond.">
+        <link rel="canonical" href="https://norvim.com/">
+        <link rel="icon" type="image/png" sizes="800x800" href="images/norvim-logo-square.png">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Norvim - Engineering Jobs & Labour Marketplace">
+        <meta property="og:description" content="Connecting engineers, employers and skilled workers.">
+        <meta property="og:url" content="https://norvim.com/">
+        <meta property="og:image" content="https://norvim.com/images/norvim-logo-square.png">
+        <script type="application/ld+json">
+        {
+          "@context":"https://schema.org",
+          "@type":"Organization",
+          "@id":"https://norvim.com/#organization",
+          "name":"Norvim",
+          "alternateName":"Norvim Engineering Jobs & Labour Marketplace",
+          "url":"https://norvim.com/",
+          "logo":"https://norvim.com/images/norvim-logo-square.png",
+          "image":"https://norvim.com/images/norvim-logo-square.png",
+          "description":"Norvim connects engineering professionals, employers and local skilled workers through jobs and a labour marketplace.",
+          "founder":{"@type":"Person","@id":"https://norvim.com/about.html#founder","name":"Raban Momanyi","jobTitle":"Founder and Owner"}
+        }
+        </script>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/marketplace.css">
+    </head>
+    <body>
+        <header class="main-header">
+
+    <nav class="navbar">
+
+        <a href="index.html" class="brand">
+            <img src="images/logo.png"
+                 alt="Norvim Logo"
+                 class="site-logo">
+        </a>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="index.html" class="active">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="employer-login.html">
+                    <span class="nav-icon">💼</span>
+                    Employers
+                </a>
+            </li>
+
+            <li>
+                <a href="applicant-login.html">
+                    <span class="nav-icon">👤</span>
+                    Applicants
+                </a>
+            </li>
+
+            <li>
+                <a href="about.html">
+                    <span class="nav-icon">ⓘ</span>
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a href="contact.html">
+                    <span class="nav-icon">☎️</span>
+                    Contact
+                </a>
+            </li>
+
+        </ul>
+
+    <a href="marketplace.html">Labour Marketplace</a>
+</nav>
+
+    <button onclick="toggleDarkMode()" id="themeToggle">
+        🌙 Dark Mode
+    </button>
+
+</header>
+        <section class="hero">
+
+    <div class="hero-content">
+
+        <h2>
+            Build Your Engineering Career With Norvim
+        </h2>
+
+        <p>
+            Discover engineering opportunities, connect with companies,
+            and take the next step in your professional journey.
+        </p>
+
+        <div class="search-box">
+
+            <input
+            type="text"
+            id="searchInput"
+            placeholder="Search jobs by title, company or location..."
+            >
+
+            <select id="categoryFilter">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option value="Electrical Engineering">
+                    Electrical Engineering
+                </option>
+
+                <option value="Civil Engineering">
+                    Civil Engineering
+                </option>
+
+                <option value="Mechanical Engineering">
+                    Mechanical Engineering
+                </option>
+
+                <option value="Software Engineering">
+                    Software Engineering
+                </option>
+
+                <option value="Chemical Engineering">
+                    Chemical Engineering
+                </option>
+                <option value="Industrial Engineering">Industrial Engineering</option>
+                <option value="Telecommunications Engineering">Telecommunications Engineering</option>
+                <option value="Environmental Engineering">Environmental Engineering</option>
+                <option value="Electrical &amp; Electronics Engineering">Electrical &amp; Electronics Engineering</option>
+                <option value="Biomedical Engineering">Biomedical Engineering</option>
+                <option value="Petroleum &amp; Gas Engineering">Petroleum &amp; Gas Engineering</option>
+                <option value="Agricultural Engineering">Agricultural Engineering</option>
+                <option value="Structural Engineering">Structural Engineering</option>
+                <option value="Geotechnical Engineering">Geotechnical Engineering</option>
+                <option value="Mechatronics Engineering">Mechatronics Engineering</option>
+                <option value="Other Engineering">Other Engineering</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="action-section">
+
+    <div class="action-card">
+
+        <h3>
+            Looking for engineering jobs?
+        </h3>
+
+        <p>
+            Create your profile, apply for opportunities,
+            and connect with engineering companies.
+        </p>
+
+        <a href="applicant-register.html">
+            Create Applicant Account
+        </a>
+
+    </div>
+
+
+    <div class="action-card">
+
+        <h3>
+            Hiring engineers?
+        </h3>
+
+        <p>
+            Post jobs and find skilled engineering talent
+            through Norvim.
+        </p>
+
+        <a href="employer-register.html">
+            Register as Employer
+        </a>
+
+    </div>
+
+</section>
+
+        <section id="jobs">
+            <!-- Job cards will appear here -->
+        </section>
+        <section id="norvimAdSlot" class="norvim-ad-slot" hidden aria-label="Sponsored advertisement"></section>
+
+<div id="pagination">
+
+    <button id="prevBtn">Previous</button>
+
+    <span id="pageInfo"></span>
+
+    <button id="nextBtn">Next</button>
+
+</div>
+
+<section id="homepageMediaSection" class="homepage-media-section" hidden>
+    <div class="homepage-media-inner">
+        <div class="homepage-media-heading">
+            <span>Norvim Updates</span>
+            <h2>News, Stories &amp; Updates</h2>
+        </div>
+        <div id="homepageMediaGrid" class="homepage-media-grid"></div>
+    </div>
+</section>
+
+<section class="norvim-premium-home premium-jobs-home" id="jobsPremium">
+  <div class="premium-home-inner">
+    <div class="premium-home-copy"><span class="premium-home-kicker">NORVIM PLUS · JOBS</span><h2>Get noticed. Get hired faster.</h2><p>Upgrade your Norvim Jobs presence with Premium visibility, a premium badge and priority presentation where applicable.</p><ul><li>✓ Premium profile visibility</li><li>✓ Premium badge</li><li>✓ Priority presentation where applicable</li></ul><div class="premium-home-price"><strong>KSh 100</strong><span>/ 30 days</span></div><a class="premium-home-btn premium-open" href="#" data-premium-product="jobs">Upgrade to Jobs Premium →</a></div>
+    <div class="premium-home-art"><div class="premium-crown">♛</div><strong>NORVIM</strong><span>PREMIUM</span><div class="premium-line"></div></div>
+  </div>
+</section>
+
+<section class="market-section homepage-comments" id="comments">
+  <div class="market-section-heading"><div><span class="market-kicker">Community</span><h2>What People Say About Norvim</h2><p>Real comments from the Norvim community.</p></div></div>
+  <div id="publicComments" class="market-comments"></div>
+  <div class="market-card market-comment-form"><h3>Leave a comment</h3><p class="market-muted">Log in to share your experience. Comments may be moderated for spam or abuse.</p><textarea id="publicCommentText" maxlength="1000" placeholder="Write your comment..."></textarea><button id="publicCommentBtn" class="market-btn market-primary" type="button">Post Comment</button><p id="commentMessage"></p></div>
+</section>
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <a href="index.html">
+    <img src="images/logo.png"
+         alt="Norvim Logo"
+         class="site-logo">
+</a>
+
+        <p>
+            Connecting engineers with opportunities and companies.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="about.html">
+                About
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+        </div>
+
+
+        <p class="copyright">
+
+            © 2026 Norvim. All rights reserved.
+
+        </p>
+
+    </div>
+
+</footer>
+
+        <script src="js/script.js?v=20260901-4"></script>
+        <script src="js/advertising.js?v=20260914-1"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+        <script src="js/homepage-media.js?v=20260907-1"></script>
+        
+    <script src="js/home-premium.js?v=20260908-2"></script>
+        <script src="js/public-comments.js?v=20260914-1"></script>
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>

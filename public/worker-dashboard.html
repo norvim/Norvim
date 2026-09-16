@@ -1,0 +1,12 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Norvim Worker Dashboard</title><link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="css/marketplace.css"></head><body><main class="market-wrap"><div class="market-nav"><a class="market-btn secondary" href="marketplace.html">Marketplace</a><a class="market-btn secondary" href="worker-profile-setup.html">My Worker Profile</a><a class="market-btn secondary" href="applicant-dashboard.html">Applicant Dashboard</a><a class="market-btn secondary" href="account.html">Account & Wallet</a></div><section id="profile" class="market-card"><h1>Worker Dashboard</h1><p id="profileText">Loading…</p></section><h2>Nearby requests</h2><div id="requests" class="market-grid"></div><h2>My bookings</h2><div id="bookings" class="market-grid"></div><div id="message"></div>
+<div id="actionModal" class="market-modal" hidden>
+  <div class="market-modal-box">
+    <button class="market-modal-close" type="button" onclick="closeActionModal()">×</button>
+    <h3 id="modalTitle">Action</h3>
+    <p id="modalHint" class="market-muted"></p>
+    <textarea id="modalText" maxlength="1500" placeholder="Enter your reason..."></textarea>
+    <div class="market-actions"><button class="market-btn secondary" type="button" onclick="closeActionModal()">Cancel</button><button class="market-btn primary" id="modalSubmit" type="button">Submit</button></div>
+  </div>
+</div></main><script src="js/worker-dashboard.js?v=20260916-empire"></script><script src="js/photo-viewer.js?v=20260914-taper"></script>
+<script src="js/location-sync.js?v=20260914-taper"></script>
+</body></html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <h1>Admin Dashboard</h1>
+
+<button class="home-btn" onclick="window.location.href='index.html'">
+    <span class="home-icon">🏠</span>
+    <span>Home</span>
+</button>
+
+<button onclick="logoutAdmin()">Logout</button>
+    <div id="dashboardStats">
+    <h3>Dashboard Statistics</h3>
+
+    <h2>Recent Activity</h2>
+    <div class="admin-notification-bar">🔔 <span id="activityCount">0</span> New Notifications <button onclick="deleteAllActivities()">Delete All</button></div>
+    <div id="activityContainer"></div>
+
+    <div class="section">
+
+    <h2>
+        User Feedback
+        (<span id="feedbackCount">0</span>)
+    </h2>
+
+    <div id="feedbackContainer"></div>
+
+</div>
+    
+
+    <p>Total Jobs: <span id="totalJobs">0</span></p>
+
+    <p>Total Applications: <span id="totalApplications">0</span></p>
+</div>
+
+<h3>
+    Total Applicants:
+    <span id="totalApplicants">0</span>
+
+    <button onclick="viewApplicants()">
+        View
+    </button>
+</h3>
+<h3>
+    Total Employers:
+    <span id="totalEmployers">0</span>
+
+    <button onclick="viewEmployers()">
+        View
+    </button>
+</h3>
+    <h2>Applications</h2>
+
+    <div id="applications"></div>
+
+    <h2>Posted Jobs</h2>
+
+<div id="jobs"></div>
+
+
+    <script src="js/admin.js?v=20260914-1"></script>
+    <script src="js/dark-mode.js?v=20260901-4"></script>
+<section id="homepageMediaControl" class="section" style="margin-top:30px">
+    <h2>Homepage Media</h2>
+    <p>Post pictures and videos that appear in the Norvim homepage updates section. If nothing is published, the section stays completely hidden.</p>
+    <form id="homepageMediaForm" enctype="multipart/form-data">
+        <input id="homepageMediaFile" name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime" required>
+        <input id="homepageMediaTitle" name="title" type="text" maxlength="160" placeholder="Title (optional)">
+        <textarea id="homepageMediaCaption" name="caption" maxlength="1000" placeholder="Caption / description (optional)"></textarea>
+        <input id="homepageMediaOrder" name="sortOrder" type="number" value="0" placeholder="Display order">
+        <label><input id="homepageMediaFeatured" name="featured" type="checkbox"> Featured</label>
+        <label><input id="homepageMediaHidden" name="status" type="checkbox"> Save as hidden</label>
+        <button type="submit">Upload to Homepage</button>
+    </form>
+    <div id="adminHomepageMedia"></div>
+</section>
+
+<section id="adminFinance" class="section" style="margin-top:30px"><h2>Payments & Wallets</h2><p>Audit customer payments, wallet top-ups, refunds and worker payouts.</p><div id="adminFinanceSummary" class="mp-stats"></div>
+<div id="walletPaymentMessages" class="wallet-payment-messages"></div><div id="adminPayments"></div></section>
+<section id="adminTopup" class="section" style="margin-top:30px"><h2>Top Up Norvim</h2><p>Use M-PESA to add funds to the Norvim payment/provider balance. The phone number is entered for the payment prompt.</p><form id="adminTopupForm" class="market-card"><input id="adminTopupAmount" type="number" min="10" max="1000000" step="1" placeholder="Amount in KSh" required><input id="adminTopupPhone" type="tel" placeholder="M-PESA number" required><input id="adminTopupEmail" type="email" placeholder="Payment email" required><button class="market-btn market-primary" type="submit">Top Up Norvim</button><p id="adminTopupMessage"></p></form></section>
+<section id="adminNorvimWithdrawal" class="section" style="margin-top:30px"><h2>Withdraw Norvim Funds</h2><p>Withdraw Norvim earnings (commission, Premium and advertising revenue) to the configured M-PESA number.</p><div class="market-card"><p><strong>Available Norvim earnings: <span id="adminAvailableEarnings">KSh 0</span></strong></p><form id="adminWithdrawalForm"><input id="adminWithdrawalAmount" type="number" min="10" step="1" placeholder="Amount in KSh" required><input id="adminWithdrawalPhone" type="tel" placeholder="M-PESA number (optional if ADMIN_PAYOUT_PHONE is set)"><button class="market-btn market-primary" type="submit">Withdraw Funds</button></form><p id="adminWithdrawalMessage"></p></div></section>
+<section id="adminAdvertising" class="section" style="margin-top:30px"><h2>Norvim Advertising</h2><p>Create image or video adverts. Set a prepaid budget and a cost per qualified view; Norvim automatically deducts the view charge when people view the advert and stops it when the budget is exhausted.</p><form id="advertisementForm" class="admin-ad-form" enctype="multipart/form-data"><div class="admin-ad-grid"><input name="advertiserName" placeholder="Advertiser / business name" required><input name="advertiserEmail" type="email" placeholder="Advertiser email"><input name="advertiserPhone" placeholder="Advertiser phone"><input name="title" maxlength="160" placeholder="Advert title" required></div><textarea name="description" maxlength="1000" placeholder="Advert description"></textarea><input name="destinationUrl" type="url" placeholder="https://example.com"><input name="media" type="file" accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/quicktime,video/mov" required><div class="admin-ad-grid"><input name="budget" type="number" min="0" step="1" placeholder="Initial budget (KSh)" required><input id="adCostPerView" name="costPerView" type="number" min="0.01" step="0.01" value="0.50" placeholder="KSh per qualified view" required></div><button class="market-btn market-primary" type="submit">Create Advertisement</button></form><div id="adminAdvertisements"></div></section>
+<section id="norvimControl" class="section" style="margin-top:30px"><h2>Norvim Controls</h2><p>Public comments, Premium and account financial controls.</p><h3>Public Comments</h3><div id="adminComments"></div><h3>Premium Accounts</h3><div id="adminPremium"></div><h3>Account Balance Adjustment</h3><p>Use the applicant ID from an account record. Positive credits add funds; negative amounts deduct funds.</p><input id="adjustApplicantId" placeholder="Applicant ID"><input id="adjustAmount" type="number" placeholder="Amount"><input id="adjustDescription" placeholder="Reason"><button onclick="adjustBalance()">Apply Balance Adjustment</button></section>
+<script src="js/admin-control.js?v=20260914-1"></script>
+
+
+<section id="marketplaceAdmin" class="section" style="margin-top:30px">
+<h2>Norvim Labour Marketplace Management</h2>
+<p>All marketplace records are loaded directly from the database. Location is not required for this admin view.</p>
+<div class="mp-actions"><button class="market-btn market-primary" type="button" onclick="loadMarketplaceAdmin()">Refresh Marketplace</button></div>
+<div id="mpStats" class="mp-stats"></div>
+<p id="mpMessage"></p>
+<h3>All Labour Requests / Jobs</h3><div id="mpRequests"></div>
+<h3>Bookings & Payment Status</h3><div id="mpBookings"></div>
+<h3>Worker Profiles</h3><div id="mpWorkers"></div>
+<h3>Cancellation Reports, Decisions & Fines</h3><div id="mpReports"></div>
+<h3>Worker Call Records</h3><p>Every tracked worker call shows who called whom and when.</p><div id="mpCalls"></div>
+</section>
+<script src="js/admin-marketplace.js?v=20260916-sekoko"></script>
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>

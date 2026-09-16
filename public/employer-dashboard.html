@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Employer Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<header class="dashboard-top">
+
+    <div class="dashboard-title">
+        <h1>Employer Dashboard</h1>
+    </div>
+
+    <button class="home-btn" onclick="window.location.href='index.html'">
+        <span class="home-icon">🏠</span>
+        <span>Home</span>
+    </button>
+
+</header>
+
+<div class="employer-header">
+
+    <img id="employerLogo">
+
+    <h2 id="companyName"></h2>
+
+</div>
+
+<button onclick="window.location.href='employer-profile.html'">
+    My Profile
+</button>
+
+<button onclick="window.location.href='post-job.html'">
+    ➕ Post Job
+</button>
+
+<button onclick="window.location.href='employer-account.html'">💰 Account & Wallet</button>
+
+<button onclick="window.location.href='advertise.html'">📣 Advertise</button>
+
+<button onclick="window.location.href='company-profile.html'">
+    Company Profile
+</button>
+
+<button id="logoutBtn">Logout</button>
+
+<button id="deleteAccount">
+    Delete Account
+</button>
+
+<h2>Your Posted Jobs</h2>
+
+<div id="jobs"></div>
+
+<h2>Applicants</h2>
+
+<div id="applications"></div>
+<a href="feedback.html" class="btn">
+give Feedback
+</a>
+
+
+<script src="js/employer-dashboard.js?v=20260901-4"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>
+
