@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applicant Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/marketplace.css">
+</head>
+
+<body>
+
+<header class="top-bar">
+
+    <h2>Engineering Jobs</h2>
+
+    <div class="top-actions">
+
+        <button id="homeBtn" class="home-btn" onclick="window.location.href='index.html'">
+            <span class="home-icon">🏠</span>
+            <span>Home</span>
+        </button>
+
+        <button id="profileBtn">
+            Profile
+        </button>
+
+        <button id="savedJobsBtn">
+            Saved Jobs
+        </button>
+
+        <button onclick="window.location.href='advertise.html'">📣 Advertise</button>
+
+        <button id="accountBtn" onclick="window.location.href='account.html'">
+            Account & Wallet
+        </button>
+
+        <button id="logout">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+<img id="dashboardPhoto"
+     src=""
+     width="100"
+     height="100"
+     style="border-radius:50%; object-fit:cover;"><br><br>
+
+
+<div class="dashboard-container">
+
+    <div class="welcome-card">
+
+        <h3 id="welcome"></h3>
+
+        <p>
+            Manage your applications, saved jobs, profile and notifications.
+        </p>
+
+    </div>
+
+    <section class="dashboard-card" id="applicantOpportunityBox" style="border:1px solid #dbe5f5;background:linear-gradient(135deg,#f7faff,#ffffff);position:relative;overflow:hidden;box-shadow:0 10px 30px rgba(20,49,95,.08);">
+        <span style="position:absolute;top:14px;right:14px;background:#d92d20;color:#fff;border-radius:999px;padding:5px 9px;font-size:10px;font-weight:900;letter-spacing:.08em;">NEW</span>
+        <div style="padding-right:55px;"><div style="font-size:11px;font-weight:900;letter-spacing:.12em;color:#2455b5;">NORVIM OPPORTUNITY</div>
+        <h3 style="margin:8px 0 6px;">Increase your chances of getting hired</h3>
+        <p id="applicantOpportunityText" style="margin:0;color:#53627a;line-height:1.55;"></p></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:15px;">
+            <button type="button" onclick="window.location.href='applicant-profile.html'">Update My Profile</button>
+            <button type="button" class="premium-open" data-premium-product="jobs">♛ Get Premium · KSh 100 / 30 days</button>
+        </div>
+    </section>
+
+    <section class="dashboard-card marketplace-quick-panel">
+        <div class="marketplace-quick-head">
+            <div><span class="market-kicker">NORVIM MARKETPLACE</span><h3>Work &amp; Earn</h3><p>Post a job, find nearby work, accept requests and manage your bookings from here.</p></div>
+            <div class="marketplace-quick-actions">
+                <button class="marketplace-quick-primary" onclick="window.location.href='marketplace-request.html'">＋ Post a Job</button>
+                <button onclick="window.location.href='marketplace.html#workers'">Find a Worker</button>
+                <button onclick="window.location.href='worker-dashboard.html'">Find Work</button>
+                <button onclick="window.location.href='worker-profile-setup.html'">Go to Worker Profile</button>
+                <button onclick="document.getElementById('marketplaceBookings')?.scrollIntoView({behavior:'smooth'})">My Work</button>
+            </div>
+        </div>
+    </section>
+
+    <div class="dashboard-card marketplace-work-panel">
+        <div class="card-header"><h3>⚡ Marketplace Work</h3><button onclick="window.location.href='marketplace-request.html'">＋ Post a Job</button></div>
+        <div id="myLabourRequests"></div>
+        <hr>
+        <h3>My Bookings</h3>
+        <div id="marketplaceBookings"></div>
+    </div>
+
+    <div class="dashboard-card">
+
+        <div class="card-header">
+
+            <h3>
+                🔔 Notifications
+                <span id="notificationCount">0</span>
+            </h3>
+
+            <button onclick="markAllAsRead()">
+                Mark all as read
+            </button>
+
+        </div>
+
+        <div id="notificationBox"></div>
+
+    </div>
+
+    <div class="dashboard-card">
+
+        <h3>My Applications</h3>
+
+        <div id="applications"></div>
+
+    </div>
+
+</div>
+<a href="feedback.html" class="btn">
+    give Feedback
+</a>
+
+<button id="deleteAccount">
+    Delete Account
+</button>
+
+<div id="marketActionModal" class="market-modal" hidden>
+  <div class="market-modal-box">
+    <button class="market-modal-close" type="button" onclick="closeMarketplaceAction()">×</button>
+    <h3 id="marketActionTitle">Action</h3>
+    <p id="marketActionHint"></p>
+    <textarea id="marketActionText" maxlength="1500" placeholder="Enter your reason..."></textarea>
+    <div><button type="button" onclick="closeMarketplaceAction()">Cancel</button> <button type="button" id="marketActionSubmit">Submit</button></div>
+  </div>
+</div>
+
+
+<script src="js/applicant-dashboard.js?v=open-1"></script>
+<script src="js/home-premium.js?v=adapter1-1"></script>
+<script src="js/notifications.js?v=20260901-4"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+<script src="js/location-sync.js?v=parachute-1"></script>
+</body>
+</html>
