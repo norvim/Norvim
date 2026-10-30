@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applicant Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <h2>Applicant Profile</h2><section id="applicantReviews" style="max-width:760px;margin:16px 0;padding:18px;background:#f3f8fc;border:1px solid #dce7f1;border-radius:14px"><h3>Reviews &amp; ratings</h3><p>Loading your rating…</p></section><p><a href="messages.html">💬 Open messages</a> · <a href="reviews.html">⭐ Review a completed marketplace booking</a></p>
+
+    <form id="profileForm">
+
+        <label>Full Name</label><br>
+        <input type="text" id="name" required><br><br>
+
+        <label>Email</label><br>
+        <input type="email" id="email" required><br><br>
+
+        <label>Phone Number</label><br>
+        <input type="text" id="phone" required><br><br>
+
+        <label>Profile Photo</label><br>
+        <img id="photoPreview"
+     src=""
+     width="120"
+     height="120"
+     style="border-radius:50%; object-fit:cover;"><br><br>
+
+<input 
+      type="file"
+        id="profilePhoto"
+        name="profilePhoto"
+        accept="image/*">
+
+<label>About Me</label><br>
+<textarea id="about"></textarea><br><br>
+
+<label>Skills</label><br>
+<input type="text" id="skills" placeholder="e.g. Electrical Installation, AutoCAD, PLC"><br><br>
+
+<label>Education</label><br>
+<textarea id="education"></textarea><br><br>
+
+<label>Experience</label><br>
+<textarea id="experience"></textarea><br><br>
+
+<label>LinkedIn</label><br>
+<input type="url" id="linkedin"><br><br>
+
+<label>Portfolio</label><br>
+<input type="url" id="portfolio"><br><br>
+
+        <button type="submit" id="updateProfileBtn">Update Profile</button>
+
+    </form>
+
+    <br>
+
+    <button id="changePassword">
+        Change Password
+    </button>
+
+    <br><br>
+
+    <button id="backDashboard" class="back-btn">
+    ← Back to Dashboard
+</button>
+
+    <script src="js/applicant-profile.js?v=20260901-4"></script>
+    <script src="js/dark-mode.js?v=20260901-4"></script>
+
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+<script src="js/location-sync.js?v=20260914-taper"></script>
+</body>
+</html>
+<script>
+(async()=>{const box=document.getElementById('applicantReviews');try{const t=localStorage.getItem('applicantToken');if(!t){box.innerHTML='<h3>Reviews &amp; ratings</h3><p>Log in to see your ratings.</p>';return;}const payload=JSON.parse(atob(t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));const id=payload.id;if(!id)throw Error('Profile ID unavailable');const r=await fetch('/api/reviews/profile/'+encodeURIComponent(id));const d=await r.json();if(!r.ok)throw Error(d.message||'Could not load reviews');const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));box.innerHTML='<h3>Reviews &amp; ratings</h3><p style="font-size:1.15rem"><strong>'+esc(d.average||'0')+' / 5</strong> ★ · '+esc(d.count||0)+' review(s)</p>'+((d.reviews||[]).slice(0,5).map(v=>'<article style="border-top:1px solid #dce7f1;padding:10px 0"><strong>'+esc(v.rating)+' ★</strong><p><b>Job:</b> '+esc(v.bookingTitle||'Completed marketplace job')+'</p><p>'+esc(v.comment||'No written comment.')+'</p><small>'+esc(v.reviewerId?.name||'Norvim member')+' · '+esc(new Date(v.createdAt).toLocaleDateString())+'</small></article>').join('')||'<p>No reviews yet. Ratings appear after completed marketplace bookings are reviewed.</p>');}catch(e){box.innerHTML='<h3>Reviews &amp; ratings</h3><p>Ratings will appear here when available.</p>';}})();
+</script>

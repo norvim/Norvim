@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Norvim - Engineering Jobs & Labour Marketplace</title>
+        <meta name="description" content="Norvim connects engineering professionals, employers and local skilled workers through jobs and a labour marketplace in Kenya and beyond.">
+        <link rel="canonical" href="https://norvim.com/">
+        <link rel="icon" type="image/png" sizes="800x800" href="images/norvim-logo-square.png">
+        <meta property="og:type" content="website">
+        <meta property="og:title" content="Norvim - Engineering Jobs & Labour Marketplace">
+        <meta property="og:description" content="Connecting engineers, employers and skilled workers.">
+        <meta property="og:url" content="https://norvim.com/">
+        <meta property="og:image" content="https://norvim.com/images/norvim-logo-square.png">
+        <script type="application/ld+json">
+        {
+          "@context":"https://schema.org",
+          "@type":"Organization",
+          "@id":"https://norvim.com/#organization",
+          "name":"Norvim",
+          "alternateName":"Norvim Engineering Jobs & Labour Marketplace",
+          "url":"https://norvim.com/",
+          "logo":"https://norvim.com/images/norvim-logo-square.png",
+          "image":"https://norvim.com/images/norvim-logo-square.png",
+          "description":"Norvim connects engineering professionals, employers and local skilled workers through jobs and a labour marketplace.",
+        }
+        </script>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="css/marketplace.css">
+    </head>
+    <body>
+        <header class="main-header">
+
+    <nav class="navbar">
+
+        <a href="index.html" class="brand">
+            <img src="images/logo.png"
+                 alt="Norvim Logo"
+                 class="site-logo">
+        </a>
+
+        <ul class="nav-links">
+
+            <li>
+                <a href="index.html" class="active">
+                    <span class="nav-icon">🏠</span>
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="employer-login.html" class="home-login-btn employer-login-btn">
+                    <span class="nav-icon">💼</span>
+                    <span>Login as an Employer</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="applicant-login.html" class="home-login-btn applicant-login-btn">
+                    <span class="nav-icon">👤</span>
+                    <span>Login as an Applicant</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="about.html">
+                    <span class="nav-icon">ⓘ</span>
+                    About
+                </a>
+            </li>
+
+            <li>
+                <a href="contact.html">
+                    <span class="nav-icon">☎️</span>
+                    Contact
+                </a>
+            </li>
+
+        </ul>
+
+    <a href="marketplace.html">Labour Marketplace</a>
+</nav>
+
+    <button onclick="toggleDarkMode()" id="themeToggle">
+        🌙 Dark Mode
+    </button>
+
+</header>
+        <section class="hero">
+
+    <div class="hero-content">
+
+        <h2>
+            Build Your Engineering Career With Norvim
+        </h2>
+
+        <p>
+            Discover engineering opportunities, connect with companies,
+            and take the next step in your professional journey.
+        </p>
+
+        <div class="search-box">
+
+            <input
+            type="text"
+            id="searchInput"
+            placeholder="Search jobs by title, company or location..."
+            >
+
+            <select id="categoryFilter">
+
+                <option value="">
+                    All Categories
+                </option>
+
+                <option value="Electrical Engineering">
+                    Electrical Engineering
+                </option>
+
+                <option value="Civil Engineering">
+                    Civil Engineering
+                </option>
+
+                <option value="Mechanical Engineering">
+                    Mechanical Engineering
+                </option>
+
+                <option value="Software Engineering">
+                    Software Engineering
+                </option>
+
+                <option value="Chemical Engineering">
+                    Chemical Engineering
+                </option>
+                <option value="Industrial Engineering">Industrial Engineering</option>
+                <option value="Telecommunications Engineering">Telecommunications Engineering</option>
+                <option value="Environmental Engineering">Environmental Engineering</option>
+                <option value="Electrical &amp; Electronics Engineering">Electrical &amp; Electronics Engineering</option>
+                <option value="Biomedical Engineering">Biomedical Engineering</option>
+                <option value="Petroleum &amp; Gas Engineering">Petroleum &amp; Gas Engineering</option>
+                <option value="Agricultural Engineering">Agricultural Engineering</option>
+                <option value="Structural Engineering">Structural Engineering</option>
+                <option value="Geotechnical Engineering">Geotechnical Engineering</option>
+                <option value="Mechatronics Engineering">Mechatronics Engineering</option>
+                <option value="Other Engineering">Other Engineering</option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section class="action-section">
+
+    <div class="action-card">
+
+        <h3>
+            Looking for engineering jobs?
+        </h3>
+
+        <p>
+            Create your profile, apply for opportunities,
+            and connect with engineering companies.
+        </p>
+
+        <a href="applicant-register.html">
+            Create Applicant Account
+        </a>
+
+    </div>
+
+
+    <div class="action-card" id="employer-registration">
+
+        <h3>
+            Hiring engineers?
+        </h3>
+
+        <p>
+            Post jobs and find skilled engineering talent
+            through Norvim.
+        </p>
+
+        <a href="employer-register.html">
+            Register as Employer
+        </a>
+
+    </div>
+
+</section>
+
+        <section class="company-hiring-section" aria-labelledby="companyHiringTitle">
+  <div class="company-hiring-inner">
+    <div class="company-hiring-copy"><span class="company-kicker">FOR COMPANIES &amp; EMPLOYERS</span>
+      <h2 id="companyHiringTitle">Find the skilled people who move your work forward.</h2>
+      <p>Norvim helps companies connect with engineering graduates, technical professionals and practical talent for their next opportunity. Reach candidates in one place and manage applications through your employer account.</p>
+      <ol class="company-hiring-steps"><li><b>1</b><span><strong>Create your company account</strong><small>Register and complete your company profile.</small></span></li><li><b>2</b><span><strong>Publish your vacancy</strong><small>Describe the role, skills and work location.</small></span></li><li><b>3</b><span><strong>Review and connect</strong><small>Explore applications and contact suitable candidates.</small></span></li></ol>
+      <a class="company-hiring-cta" href="#employer-registration">See employer registration options <span aria-hidden="true">→</span></a>
+      <p class="company-hiring-note">Already registered? <a href="employer-login.html">Log in to your employer account</a>.</p>
+    </div><div class="company-hiring-visual" aria-hidden="true"><div class="hiring-orbit orbit-one"></div><div class="hiring-orbit orbit-two"></div><div class="hiring-tile tile-main"><span>TECHNICAL TALENT</span><strong>Skills meet opportunity.</strong><div class="talent-bars"><i></i><i></i><i></i><i></i><i></i></div></div><div class="hiring-tile tile-small"><b>✓</b><span>Candidate applications</span></div><div class="hiring-tile tile-bottom"><b>↗</b><span>Build your team</span></div></div>
+  </div>
+</section>
+<style>
+.company-hiring-section{margin:42px auto;padding:clamp(24px,5vw,58px) 20px;background:linear-gradient(120deg,#101f3d,#173c69 60%,#087f8c);color:#fff;border-radius:24px;max-width:1200px;overflow:hidden}.company-hiring-inner{max-width:1080px;margin:auto;display:grid;grid-template-columns:1.2fr .8fr;gap:32px;align-items:center}.company-kicker{font-size:.78rem;letter-spacing:.14em;font-weight:800;color:#76f0df}.company-hiring-copy h2{font-size:clamp(1.8rem,4vw,3rem);line-height:1.12;margin:12px 0}.company-hiring-copy>p{line-height:1.7;color:#e0ebf8;max-width:650px}.company-hiring-steps{list-style:none;padding:0;margin:24px 0;display:grid;gap:15px}.company-hiring-steps li{display:flex;align-items:center;gap:13px}.company-hiring-steps li>b{display:grid;place-items:center;min-width:38px;height:38px;border-radius:12px;background:#fff;color:#12345b}.company-hiring-steps small{display:block;color:#c7d9ec;margin-top:3px}.company-hiring-cta{display:inline-flex;gap:18px;align-items:center;padding:14px 20px;border-radius:12px;background:#68f0d5;color:#092c42;text-decoration:none;font-weight:800}.company-hiring-note{font-size:.9rem}.company-hiring-note a{color:#8ff8e8}.company-hiring-visual{min-height:340px;position:relative;display:grid;place-items:center}.hiring-orbit{position:absolute;border:1px solid #ffffff35;border-radius:50%;width:280px;height:280px}.orbit-two{width:220px;height:220px;border-style:dashed}.hiring-tile{position:absolute;border:1px solid #ffffff45;background:#ffffff14;backdrop-filter:blur(10px);border-radius:18px;box-shadow:0 20px 55px #06152c50}.tile-main{padding:25px;width:235px;transform:rotate(-4deg)}.tile-main span{font-size:.7rem;letter-spacing:.1em;color:#82f7e2}.tile-main strong{display:block;font-size:1.7rem;margin:12px 0}.talent-bars{display:flex;gap:7px;align-items:end;height:42px}.talent-bars i{display:block;width:24px;border-radius:5px 5px 2px 2px;background:#75e9d9;height:55%}.talent-bars i:nth-child(2){height:90%}.talent-bars i:nth-child(3){height:68%}.talent-bars i:nth-child(4){height:100%}.talent-bars i:nth-child(5){height:78%}.tile-small,.tile-bottom{display:flex;align-items:center;gap:10px;padding:13px 16px;font-size:.85rem}.tile-small{top:30px;right:0}.tile-small b,.tile-bottom b{font-size:1.3rem;color:#80f4de}.tile-bottom{bottom:25px;left:0}@media(max-width:760px){.company-hiring-inner{grid-template-columns:1fr}.company-hiring-visual{min-height:290px}.tile-small{right:0}.tile-bottom{left:0}}
+</style>
+<section id="jobs" aria-labelledby="availableJobsTitle">
+            <h2 id="availableJobsTitle" class="available-jobs-title">Available Jobs</h2>
+            <div id="jobsGrid" aria-live="polite"><p class="jobs-loading">Loading available jobs…</p></div>
+        </section>
+<div id="pagination">
+
+    <button id="prevBtn">Previous</button>
+
+    <span id="pageInfo"></span>
+
+    <button id="nextBtn">Next</button>
+
+</div>
+
+<section id="norvimAdSlot" class="norvim-ad-slot" hidden aria-label="Sponsored advertisement"></section>
+
+<section id="homepageMediaSection" class="homepage-media-section" hidden>
+    <div class="homepage-media-inner">
+        <div class="homepage-media-heading">
+            <span>Norvim Updates</span>
+            <h2>News, Stories &amp; Updates</h2>
+        </div>
+        <div id="homepageMediaGrid" class="homepage-media-grid"></div>
+    </div>
+</section>
+
+<section class="norvim-premium-home premium-jobs-home" id="jobsPremium">
+  <div class="premium-home-inner">
+    <div class="premium-home-copy"><span class="premium-home-kicker">NORVIM PLUS · JOBS</span><h2>Get noticed. Get hired faster.</h2><p>Upgrade your Norvim Jobs presence with Premium visibility, a premium badge and priority presentation where applicable.</p><ul><li>✓ Premium profile visibility</li><li>✓ Premium badge</li><li>✓ Priority presentation where applicable</li></ul><div class="premium-home-price"><strong>KSh 100</strong><span>/ 30 days</span></div><a class="premium-home-btn premium-open" href="#" data-premium-product="jobs">Upgrade to Jobs Premium →</a></div>
+    <div class="premium-home-art"><div class="premium-crown">♛</div><strong>NORVIM</strong><span>PREMIUM</span><div class="premium-line"></div></div>
+  </div>
+</section>
+
+<section class="market-section homepage-comments" id="comments">
+  <div class="market-section-heading"><div><span class="market-kicker">Community</span><h2>What People Say About Norvim</h2><p>Real comments from the Norvim community.</p></div></div>
+  <div id="publicComments" class="market-comments"></div>
+  <div class="market-card market-comment-form"><h3>Leave a comment</h3><p class="market-muted">Log in to share your experience. Comments may be moderated for spam or abuse.</p><textarea id="publicCommentText" maxlength="1000" placeholder="Write your comment..."></textarea><button id="publicCommentBtn" class="market-btn market-primary" type="button">Post Comment</button><p id="commentMessage"></p></div>
+</section>
+
+<footer class="footer">
+
+    <div class="footer-content">
+
+        <a href="index.html">
+    <img src="images/logo.png"
+         alt="Norvim Logo"
+         class="site-logo">
+</a>
+
+        <p>
+            Connecting engineers with opportunities and companies.
+        </p>
+
+
+        <div class="footer-links">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="about.html">
+                About
+            </a>
+
+            <a href="contact.html">
+                Contact
+            </a>
+
+        </div>
+
+
+        <p class="copyright">
+
+            © 2026 Norvim. All rights reserved.
+
+        </p>
+
+    </div>
+
+</footer>
+
+        <script src="js/script.js?v=pere-2"></script>
+        <script src="js/advertising.js?v=pere-2"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+        <script src="js/homepage-media.js?v=20260907-1"></script>
+        
+    <script src="js/home-premium.js?v=20260908-2"></script>
+        <script src="js/public-comments.js?v=20260914-1"></script>
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>

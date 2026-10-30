@@ -1,0 +1,7 @@
+(() => {
+  const esc=v=>String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  async function load(){try{const r=await fetch('/api/marketplace/comments');const comments=await r.json();const box=document.getElementById('publicComments');if(!box)return;box.innerHTML=Array.isArray(comments)&&comments.length?comments.map(c=>`<article class="market-comment"><strong>${esc(c.name)}</strong><span>${new Date(c.createdAt).toLocaleDateString()}</span><p>${esc(c.message)}</p></article>`).join(''):'<div class="market-empty">Be the first to share a comment.</div>';}catch(e){}}
+  const btn=document.getElementById('publicCommentBtn');
+  if(btn)btn.addEventListener('click',async()=>{const token=localStorage.getItem('applicantToken'), text=document.getElementById('publicCommentText').value.trim(), out=document.getElementById('commentMessage');if(!token){out.textContent='Please log in first.';return}if(text.length<3){out.textContent='Please write a comment.';return}btn.disabled=true;try{const r=await fetch('/api/marketplace/comments',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+token},body:JSON.stringify({message:text})});const d=await r.json();if(!r.ok)throw Error(d.message);out.textContent=d.message;document.getElementById('publicCommentText').value='';load();}catch(e){out.textContent=e.message}finally{btn.disabled=false}});
+  load();
+})();

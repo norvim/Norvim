@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page employer-auth-page">
+
+    <main class="auth-shell"><section class="auth-card graffiti-employer">
+<div class="auth-graffiti" aria-hidden="true"><span>NORVIM</span><span>CREATE</span><span>RISE</span></div>
+<div class="auth-brand"><img src="images/logo.png" alt="Norvim Logo" class="auth-logo"><span>EMPLOYER SPACE</span></div>
+<h1>Create your Employer Account</h1>
+<p class="auth-intro">Set up your company presence and start connecting with skilled talent.</p>
+
+    <form id="registerForm" enctype="multipart/form-data">
+
+        <input
+            type="text"
+            id="companyName"
+            placeholder="Company Name"
+            required
+        >
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Company Email"
+            required
+        >
+
+        <label>Password</label>
+
+<div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+        <input
+    type="file"
+    id="logo"
+    name="logo"
+    accept="image/*"
+>
+
+    <button type="submit" id="registerBtn">Register</button>
+
+<button type="button" class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+    
+    </form>
+    <div class="auth-bottom-note">Already have an account? <a href="employer-login.html">Log in</a></div>
+</section></main>
+
+    <script src="js/employer-register.js?v=20260901-4"></script>
+    <script src="js/dark-mode.js?v=20260901-4"></script>
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>
