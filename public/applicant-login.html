@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applicant Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="auth-page applicant-auth-page">
+
+<main class="auth-shell"><section class="auth-card graffiti-applicant">
+<div class="auth-graffiti" aria-hidden="true"><span>DISCOVER</span><span>CREATE</span><span>MOVE</span></div>
+<div class="auth-brand"><img src="images/logo.png" alt="Norvim Logo" class="auth-logo"><span>APPLICANT SPACE</span></div>
+<h2>Login as an Applicant</h2>
+<p class="auth-intro">Discover jobs, build your profile and connect with opportunities.</p>
+
+<form id="loginForm">
+
+    <input 
+    type="email" 
+    id="email" 
+    placeholder="Email" 
+    required>
+    <br><br>
+
+
+    <div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+
+    <button type="submit" id="loginBtn">Login</button>
+    
+
+
+    <p>
+    <a href="forgot-password.html">
+        Forgot Password?
+    </a>
+</p>
+
+</form>
+<div class="auth-bottom-note">New to Norvim? <a href="applicant-register.html">Create an applicant account</a></div>
+</section></main>
+
+<button class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+
+
+<script src="js/applicant-login.js?v=20260901-4"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>
