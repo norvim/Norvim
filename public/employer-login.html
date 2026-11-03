@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="auth-page employer-auth-page">
+
+<main class="auth-shell"><section class="auth-card graffiti-employer">
+<div class="auth-graffiti" aria-hidden="true"><span>CONNECT</span><span>BUILD</span><span>GROW</span></div>
+<div class="auth-brand"><img src="images/logo.png" alt="Norvim Logo" class="auth-logo"><span>EMPLOYER SPACE</span></div>
+<h1>Login as an Employer</h1>
+<p class="auth-intro">Find talent, post opportunities and grow your team with Norvim.</p>
+
+<form id="loginForm">
+
+    <input
+        type="email"
+        id="email"
+        placeholder="Company Email"
+        required
+    >
+
+    <div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+    <button type="submit" id="loginBtn">Login</button>
+
+    <button type="button" class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+
+
+    <p>
+    <a href="employer-forgot-password.html">
+        Forgot Password?
+    </a>
+</p>
+
+</form>
+<div class="auth-bottom-note">New to Norvim? <a href="employer-register.html">Create an employer account</a></div>
+</section></main>
+
+<script src="js/employer-login.js?v=20260901-4"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+</body>
+</html>
