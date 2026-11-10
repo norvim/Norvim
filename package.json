@@ -22,7 +22,7 @@
     "multer": "^2.2.0",
     "nodemailer": "^10.3.1",
     "resend": "^6.19.0",
-    "web-push": "^3.6.7"
+    "web-push": "^4.0.0"
   },
   "allowScripts": {
     "bcrypt@6.0.0": true
