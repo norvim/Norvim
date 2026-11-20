@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applicant Profile</title>
+    <link rel="stylesheet" href="css/style.css">
+        <link rel="manifest" href="/manifest.webmanifest">
+        <meta name="theme-color" content="#123b66">
+</head>
+
+<body>
+
+<h2>Applicant Full Profile</h2>
+
+<div class="profile-card">
+    <div id="profileContainer"></div>
+</div>
+
+<br>
+
+<button onclick="history.back()">
+    Back
+</button>
+
+
+<script src="js/applicant-view.js?v=20260901-4"></script>
+<script src="js/dark-mode.js?v=20260901-4"></script>
+
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', {scope: '/'})
+    .catch(error => console.warn('Norvim app setup unavailable:', error)));
+}
+</script>
+</body>
+</html>
