@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employer Registration</title>
+    <link rel="stylesheet" href="css/style.css">
+        <link rel="manifest" href="/manifest.webmanifest">
+        <meta name="theme-color" content="#123b66">
+</head>
+<body class="auth-page employer-auth-page">
+
+    <main class="auth-shell"><section class="auth-card graffiti-employer">
+<div class="auth-graffiti" aria-hidden="true"><span>NORVIM</span><span>CREATE</span><span>RISE</span></div>
+<div class="auth-brand"><img src="images/logo.png" alt="Norvim Logo" class="auth-logo"><span>EMPLOYER SPACE</span></div>
+<h1>Create your Employer Account</h1>
+<p class="auth-intro">Set up your company presence and start connecting with skilled talent.</p>
+
+    <form id="registerForm" enctype="multipart/form-data">
+
+        <input
+            type="text"
+            id="companyName"
+            placeholder="Company Name"
+            required
+        >
+
+        <input
+            type="email"
+            id="email"
+            placeholder="Company Email"
+            required
+        >
+
+        <label>Password</label>
+
+<div class="password-container">
+
+    <input
+        type="password"
+        id="password"
+        placeholder="Enter password"
+        required
+    >
+
+    <button type="button" onclick="togglePassword()">
+        👁️
+    </button>
+
+</div>
+
+        <div class="employer-logo-field" style="margin:14px 0;text-align:left">
+            <label for="logo" style="display:block;font-weight:700;margin-bottom:6px">Company / Business Logo (optional)</label>
+            <small style="display:block;line-height:1.45;margin-bottom:8px;color:#526174">Upload your company's official logo or business brand image. Please do not upload a personal selfie or unrelated picture. Use a clear PNG, JPG or WebP image.</small>
+            <input type="file" id="logo" name="logo" accept="image/png,image/jpeg,image/webp" aria-describedby="logoHelp">
+            <small id="logoHelp" style="display:block;margin-top:5px;color:#64748b">This logo may appear on your employer profile and job listings.</small>
+        </div>
+
+    <button type="submit" id="registerBtn">Register</button>
+
+<button type="button" class="back-btn" onclick="window.location.href='index.html'">
+    ← Back to Home
+</button>
+    
+    </form>
+    <div class="auth-bottom-note">Already have an account? <a href="employer-login.html">Log in</a></div>
+</section></main>
+
+    <script src="js/employer-register.js?v=timer-1"></script>
+    <script src="js/dark-mode.js?v=20260901-4"></script>
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', {scope: '/'})
+    .catch(error => console.warn('Norvim app setup unavailable:', error)));
+}
+</script>
+</body>
+</html>

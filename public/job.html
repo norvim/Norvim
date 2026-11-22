@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Job Details</title>
+  <link rel="stylesheet" href="css/style.css">
+        <link rel="manifest" href="/manifest.webmanifest">
+        <meta name="theme-color" content="#123b66">
+</head>
+<body>
+
+  <a href="index.html">⬅️ Back</a>
+<br><br>
+
+    <h1>Job Details Page</h1>
+  <div class="market-card" style="margin:12px 0;padding:12px"><strong>Stay safe with Norvim:</strong> Never pay to secure a job or interview. Never share your PIN or password.</div>
+  <div id="jobDetails"></div>
+
+  <script src="js/job.js?v=20260901-4"></script>
+  <script src="js/dark-mode.js?v=20260901-4"></script>
+<script src="js/photo-viewer.js?v=20260914-taper"></script>
+
+<script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js', {scope: '/'})
+    .catch(error => console.warn('Norvim app setup unavailable:', error)));
+}
+</script>
+</body>
+</html>

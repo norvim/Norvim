@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.norvim.twa",
+      "sha256_cert_fingerprints": [
+        "99:9B:D3:C6:81:A3:02:AC:30:CB:0D:54:94:1C:9E:17:64:DE:55:5F:E4:D9:E8:EA:74:17:70:12:5D:7D:14:A2"
+      ]
+    }
+  }
+]
